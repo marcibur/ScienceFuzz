@@ -1,4 +1,4 @@
-﻿using ScienceFuzz.Models;
+﻿using ScienceFuzz.Web.Spa.Models;
 using System.Collections.Generic;
 
 namespace ScienceFuzz.Web.Spa.Components

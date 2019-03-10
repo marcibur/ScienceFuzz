@@ -1,4 +1,6 @@
 ﻿@page "/Calculator"
+@inject State State;
+@inject IJSRuntime JS;
 
 <main class="container-fluid calculator-main-content">
     <div class="row">
@@ -43,7 +45,7 @@
                     <div class="row">
                         <div class="col col-2"></div>
                         <div class="col col-8 align-self-center">
-                            <button class="btn btn-success btn-block" type="button"><i class="fas fa-plus"></i>Add publication</button>
+                            <button class="btn btn-success btn-block" type="button" onclick="@UpdateChartAsync"><i class="fas fa-plus"></i>Add publication</button>
                         </div>
                         <div class="col col-2"></div>
                     </div>
@@ -60,5 +62,32 @@
 
 @functions
 {
+    private bool ChartInitialized = false;
 
+    protected override async Task OnAfterRenderAsync()
+    {
+        if (!ChartInitialized)
+        {
+            await JS.InvokeAsync<string>("initChart");
+            ChartInitialized = true;
+        }
+    }
+
+    private async Task UpdateChartAsync()
+    {
+        var rand = new Random();
+        var data = new double[]
+        {
+    rand.NextDouble(),
+    rand.NextDouble(),
+    rand.NextDouble(),
+    rand.NextDouble(),
+    rand.NextDouble(),
+    rand.NextDouble(),
+    rand.NextDouble(),
+    rand.NextDouble()
+                                };
+        await JS.InvokeAsync<string>("updateChart", data);
+        StateHasChanged();
+    }
 }
