@@ -4,6 +4,13 @@ window.initChart = () => {
     var ctx = document.getElementById("results-chart").getContext("2d");
     console.log("Got chart conext.", ctx);
 
+    try {
+        window.chart.destroy();
+    }
+    catch (e) {
+        console.log("Tried to remove existing chart but there was none.");
+    }
+
     window.chart = new Chart(ctx, {
         type: 'radar',
         data: {

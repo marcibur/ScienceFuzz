@@ -5,47 +5,54 @@
 <main class="container-fluid calculator-main-content">
     <div class="row">
         <div class="col col-12 col-lg-6">
-            <section class="shadow-lg publication">
-                <div>
-                    <form>
-                        <div class="form-group">
-                            <label class="publication-label">Description</label>
-                            <textarea class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="publication-label">Scientific domains</label>
-                            <div class="form-row">
-                                <div class="col">
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-wrench"></i>&nbsp;Technology</label></div>
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-medkit"></i>&nbsp;Health</label></div>
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-search"></i>&nbsp;Exact</label></div>
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-cloud-sun-rain"></i>&nbsp;Natural</label></div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-book"></i>&nbsp;Humanities</label></div>
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-landmark"></i>&nbsp;Arts</label></div>
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-users"></i>&nbsp;Social</label></div>
-                                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"> <i class="fas fa-leaf"></i>&nbsp;Agriculture</label></div>
+            @foreach (var publication in State.Publications)
+            {
+                <section class="shadow-lg publication">
+                    @if (State.Publications.Count > 1 || !PublicationIsEmpty(publication))
+                    {
+                        <i class="fas fa-times rm-icon" onclick="@(e => RemovePublicationAsync(publication))"></i>
+                    }
+                    <div>
+                        <form>
+                            <div class="form-group">
+                                <label class="publication-label">Description</label>
+                                <textarea bind="@publication.Description" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="publication-label">Scientific domains</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Technology" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-wrench"></i>&nbsp;Technology</label></div>
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Health" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-medkit"></i>&nbsp;Health</label></div>
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Exact" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-search"></i>&nbsp;Exact</label></div>
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Natural" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-cloud-sun-rain"></i>&nbsp;Natural</label></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Humanities" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-book"></i>&nbsp;Humanities</label></div>
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Arts" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-landmark"></i>&nbsp;Arts</label></div>
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Social" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-users"></i>&nbsp;Social</label></div>
+                                        <div class="form-check"><label class="form-check-label"><input bind="@publication.Agriculture" onclick="@UpdateChartAsync" class="form-check-input" type="checkbox" /> <i class="fas fa-leaf"></i>&nbsp;Agriculture</label></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="publication-label">Scientific disciplines</label>
-                            <p>-</p>
-                        </div>
-                        <div class="form-group">
-                            <label class="publication-label">Scientific journals</label>
-                            <p>-</p>
-                        </div>
-                    </form>
-                </div>
-            </section>
+                            <div class="form-group">
+                                <label class="publication-label">Scientific disciplines</label>
+                                <p>-</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="publication-label">Scientific journals</label>
+                                <p>-</p>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            }
             <section class="add-publication-section">
                 <section>
                     <div class="row">
                         <div class="col col-2"></div>
                         <div class="col col-8 align-self-center">
-                            <button class="btn btn-success btn-block" type="button" onclick="@UpdateChartAsync"><i class="fas fa-plus"></i>Add publication</button>
+                            <button class="btn btn-success btn-block" type="button" onclick="@AddPublication"><i class="fas fa-plus"></i>Add another publication</button>
                         </div>
                         <div class="col col-2"></div>
                     </div>
@@ -73,8 +80,47 @@
         }
     }
 
+    protected override void OnInit()
+    {
+        if (State.Publications.Count == 0)
+        {
+            State.Publications.Add(new Publication());
+        }
+
+        ChartInitialized = false;
+    }
+
+    private void AddPublication()
+    {
+        State.Publications.Add(new Publication() { Description = "" });
+    }
+
+    private async Task RemovePublicationAsync(Publication publication)
+    {
+        State.Publications.Remove(publication);
+        if (State.Publications.Count == 0)
+        {
+            await JS.InvokeAsync<string>("initChart");
+            AddPublication();
+            return;
+        }
+        else if (State.Publications.Count == 1 && PublicationIsEmpty(State.Publications.First()))
+        {
+            await JS.InvokeAsync<string>("initChart");
+            return;
+        }
+
+        await UpdateChartAsync();
+    }
+
     private async Task UpdateChartAsync()
     {
+        if (State.Publications.Count == 1 && PublicationIsEmpty(State.Publications.First()))
+        {
+            await RemovePublicationAsync(null);
+            return;
+        }
+
         var rand = new Random();
         var data = new double[]
         {
@@ -86,8 +132,25 @@
     rand.NextDouble(),
     rand.NextDouble(),
     rand.NextDouble()
-                                };
+                                                                                    };
         await JS.InvokeAsync<string>("updateChart", data);
-        StateHasChanged();
+    }
+
+    private bool PublicationIsEmpty(Publication publication)
+    {
+        if (string.IsNullOrWhiteSpace(publication.Description) &&
+            !publication.Technology &&
+            !publication.Health &&
+            !publication.Exact &&
+            !publication.Natural &&
+            !publication.Humanities &&
+            !publication.Arts &&
+            !publication.Social &&
+            !publication.Agriculture)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
