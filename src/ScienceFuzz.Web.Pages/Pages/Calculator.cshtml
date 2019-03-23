@@ -58,16 +58,16 @@
                                 <label class="publication-label">Scientific domains score</label>
                                 <div class="form-row">
                                     <div class="col">
-                                        <span class="scientific-domain"><i class="fas fa-wrench"></i>&nbsp;Technology:&nbsp;<strong class="@journal.Technology.Class">@journal.Technology.Value</strong>&nbsp;</span>
-                                        <span class="scientific-domain"><i class="fas fa-medkit"></i>&nbsp;Health:&nbsp;<strong class="@journal.Health.Class">@journal.Health.Value</strong></span>
-                                        <span class="scientific-domain"><i class="fas fa-search"></i>&nbsp;Exact:&nbsp;<strong class="@journal.Exact.Class">@journal.Exact.Value</strong></span>
-                                        <span class="scientific-domain"><i class="fas fa-cloud-sun-rain"></i>&nbsp;Natural:&nbsp;<strong class="@journal.Natural.Class">@journal.Natural.Value</strong></span>
+                                        @for (int i = 0; i < journal.Domains.Count / 2; i++)
+                                        {
+                                            <span class="scientific-domain"><i class="@journal.Domains[i].Icon"></i>&nbsp;@journal.Domains[i].Name:&nbsp;<strong class="@journal.Domains[i].Class">@journal.Domains[i].Value</strong>&nbsp;</span>
+                                        }
                                     </div>
                                     <div class="col">
-                                        <span class="scientific-domain"><i class="fas fa-book"></i>&nbsp;Humanities:&nbsp;<strong class="@journal.Humanities.Class">@journal.Humanities.Value</strong></span>
-                                        <span class="scientific-domain"><i class="fas fa-landmark"></i>&nbsp;Arts:&nbsp;<strong class="@journal.Arts.Class">@journal.Arts.Value</strong></span>
-                                        <span class="scientific-domain"><i class="fas fa-users"></i>&nbsp;Social:&nbsp;<strong class="@journal.Social.Class">@journal.Social.Value</strong></span>
-                                        <span class="scientific-domain"><i class="fas fa-leaf"></i>&nbsp;Agriculture:&nbsp;<strong class="@journal.Agriculture.Class">@journal.Agriculture.Value</strong></span>
+                                        @for (int i = journal.Domains.Count / 2; i < journal.Domains.Count; i++)
+                                        {
+                                            <span class="scientific-domain"><i class="@journal.Domains[i].Icon"></i>&nbsp;@journal.Domains[i].Name:&nbsp;<strong class="@journal.Domains[i].Class">@journal.Domains[i].Value</strong>&nbsp;</span>
+                                        }
                                     </div>
                                 </div>
                             </div>
