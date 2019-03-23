@@ -22,9 +22,9 @@
                     <div>
                         <ol>
                             <li>Download '.csv' file containing sample data.</li>
-                            <li>Modify downloaded file with your own data.</li>
+                            <li>Modify downloaded file with your own custom data.</li>
                             <li>Upload modified file for processing.</li>
-                            <li>See your results!</li>
+                            <li>Click the 'Calculate' button to see your results.</li>
                         </ol>
                     </div>
                     <hr>
@@ -32,8 +32,8 @@
                         <div class="row text-center">
                             <div asp-validation-summary="All" style="        color: red"></div>
                             <div class="col"><a class="btn btn-primary btn-block" asp-controller="Sample" asp-action="GetSample">Sample&nbsp;<i class="fas fa-download"></i>&nbsp;</a></div>
-                            <div class="col"><label>Upload your data&nbsp;</label><i class="fas fa-upload"></i><input asp-for="CsvFile"></div>
-                            <div class="col"><button class="btn btn-success btn-block" type="submit">Calculate&nbsp;<i class="fas fa-check"></i></button></div>
+                            <div class="col"><label>Upload your data&nbsp;</label><i class="fas fa-upload"></i><input asp-for="CsvFile" style="        width: 200px"></div>
+                            <div class="col"><button class="btn btn-success btn-block" type="submit">Calculate&nbsp;<i class="fas fa-cogs"></i></button></div>
                         </div>
                     </form>
                 </section>
