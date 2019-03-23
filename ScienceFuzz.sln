@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.28705.295
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Web.Spa", "src\ScienceFuzz.Web.Spa\ScienceFuzz.Web.Spa.csproj", "{8E8ABFC6-F8EA-41A5-A6F3-6A1DF1602298}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Web.Spa", "src\ScienceFuzz.Web.Spa\ScienceFuzz.Web.Spa.csproj", "{8E8ABFC6-F8EA-41A5-A6F3-6A1DF1602298}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Web.Server", "src\ScienceFuzz.Web.Server\ScienceFuzz.Web.Server.csproj", "{5EC6A1D3-510F-4A14-95E7-4057F81041F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Web.Server", "src\ScienceFuzz.Web.Server\ScienceFuzz.Web.Server.csproj", "{5EC6A1D3-510F-4A14-95E7-4057F81041F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Web.Pages", "src\ScienceFuzz.Web.Pages\ScienceFuzz.Web.Pages.csproj", "{603C103F-9363-4E38-9C8A-536E0926D562}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{5EC6A1D3-510F-4A14-95E7-4057F81041F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EC6A1D3-510F-4A14-95E7-4057F81041F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EC6A1D3-510F-4A14-95E7-4057F81041F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{603C103F-9363-4E38-9C8A-536E0926D562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{603C103F-9363-4E38-9C8A-536E0926D562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{603C103F-9363-4E38-9C8A-536E0926D562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{603C103F-9363-4E38-9C8A-536E0926D562}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +36,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8E8ABFC6-F8EA-41A5-A6F3-6A1DF1602298} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 		{5EC6A1D3-510F-4A14-95E7-4057F81041F4} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
+		{603C103F-9363-4E38-9C8A-536E0926D562} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36FB526F-A843-426D-ACCC-9248CBA4CD62}

@@ -1,0 +1,19 @@
+.contact-heading {
+  display: inline;
+  color: #3e8ce4;
+}
+
+.contact-icon {
+  color: #3e8ce4;
+  font-size: 30px;
+}
+
+.contact-container {
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.contact-header {
+  margin-bottom: 30px;
+}
+
