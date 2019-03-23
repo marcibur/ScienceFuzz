@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using ScienceFuzz.Web.Pages.Tools;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 
@@ -12,8 +13,7 @@ namespace ScienceFuzz.Web.Pages.Pages
 {
     public class CalculatorModel : PageModel
     {
-        [BindProperty(SupportsGet = false)]
-        [ValidFileExtensions("csv")]
+        [BindProperty(SupportsGet = false), ValidFileExtensions("csv"), Required]
         public IFormFile CsvFile { get; set; }
         public IEnumerable<JournalViewModel> Journals { get; private set; } = new List<JournalViewModel>();
         public string ResultsJSON { get; private set; } = JsonConvert.SerializeObject(new double[] { });
@@ -75,17 +75,19 @@ namespace ScienceFuzz.Web.Pages.Pages
             public double Value { get; set; }
         }
 
-        public class Results
+        public Results Scores { get; set; } = new Results
         {
-            public double Social { get; set; }
-            public double Agriculture { get; set; }
-            public double Exact { get; set; }
-            public double Health { get; set; }
-            public double Humanities { get; set; }
-            public double Technology { get; set; }
-            public double Natural { get; set; }
-            public double Arts { get; set; }
-        }
+            {"Humanities", 0 },
+            {"Social", 0 },
+            {"Health", 0 },
+            {"Technology", 0 },
+            {"Exact", 0 },
+            {"Natural", 0 },
+            {"Agriculture", 0 },
+            {"Arts", 0 }
+        };
+
+        public class Results : Dictionary<string, double> { }
 
         public IActionResult OnPost()
         {
@@ -96,6 +98,8 @@ namespace ScienceFuzz.Web.Pages.Pages
                 {
                     var journals = csv.GetRecords<JournalInputModel>().ToList();
                     var package = PackageDomainsForProcessing(journals);
+                    Calculate(package);
+                    ScoresToJson();
                     MapToJournalViewModels(journals);
                 }
             }
@@ -103,20 +107,37 @@ namespace ScienceFuzz.Web.Pages.Pages
             return Page();
         }
 
-        private void Calculate(IEnumerable<JournalInputModel> journals)
+        private void Calculate(IEnumerable<Journal> journals)
         {
             const double A = 0.01;
-            var results = new Results();
 
             foreach (var journal in journals)
             {
-
+                foreach (var domain in journal.Domains)
+                {
+                    Scores[domain.Name] = S(Scores[domain.Name] * A, domain.Value * A) * journal.Contributions;
+                }
             }
         }
 
         private double S(double x, double y)
         {
             return x + y - x * y;
+        }
+
+        private void ScoresToJson()
+        {
+            ResultsJSON = JsonConvert.SerializeObject(new double[]
+            {
+                Scores["Humanities"],
+                Scores["Social"],
+                Scores["Health"],
+                Scores["Technology"],
+                Scores["Exact"],
+                Scores["Natural"],
+                Scores["Agriculture"],
+                Scores["Arts"]
+            });
         }
 
         private IEnumerable<Journal> PackageDomainsForProcessing(IEnumerable<JournalInputModel> rows)

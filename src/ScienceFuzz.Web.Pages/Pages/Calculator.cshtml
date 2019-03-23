@@ -9,6 +9,21 @@
     <link href="assets/css/calculator.css" rel="stylesheet" />
 }
 
+<div class="modal fade modal-fullscreen" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Scientific domain scores</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div style="        padding-top:30px;padding-bottom: 30px"><canvas class="results-chart"></canvas></div>
+        </div>
+    </div>
+</div>
+
 <main class="container-fluid calculator-main-content">
     <div class="row">
         <div class="col col-12 col-lg-6">
@@ -29,8 +44,8 @@
                     </div>
                     <hr>
                     <form method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="All" style="        color: red" class="text-center"></div>
                         <div class="row text-center">
-                            <div asp-validation-summary="All" style="        color: red"></div>
                             <div class="col"><a class="btn btn-primary btn-block" asp-controller="Sample" asp-action="GetSample">Sample&nbsp;<i class="fas fa-download"></i>&nbsp;</a></div>
                             <div class="col"><label>Upload your data&nbsp;</label><i class="fas fa-upload"></i><input asp-for="CsvFile" style="        width: 200px"></div>
                             <div class="col"><button class="btn btn-success btn-block" type="submit">Calculate&nbsp;<i class="fas fa-cogs"></i></button></div>
@@ -78,7 +93,7 @@
         </div>
         <div class="col col-12 col-lg-6">
             <section class="chart">
-                <div class="chart-display"><canvas id="results-chart"></canvas></div>
+                <a data-toggle="modal" data-target="#myModal" id="trigger-btn" style="        cursor: pointer"><div class="chart-display"><canvas class="results-chart"></canvas></div></a>
             </section>
         </div>
     </div>
@@ -86,13 +101,13 @@
 
 @section Scripts
 {
+    <script src="assets/js/bs-modal-fullscreen.min.js"></script>
     <script src="assets/js/chart.js"></script>
     <script src="assets/js/calculator.js"></script>
     <script>
-        initChart(@Model.ResultsJSON);
-
-        $('#btn-submit').click(function () {
-            $('#file-form').submit();
+        $(document).ready(function () {
+            initChart(@Model.ResultsJSON);
+            $('#myModal').fullscreen();
         });
     </script>
 }
