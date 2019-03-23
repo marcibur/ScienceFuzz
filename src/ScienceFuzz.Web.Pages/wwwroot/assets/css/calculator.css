@@ -11,6 +11,7 @@
   background-color: white;
   padding: 20px;
   margin-top: 30px;
+  border: 1px solid lightgray;
 }
 
 .publication-label {
@@ -65,5 +66,16 @@
   float: right;
   color: red;
   cursor: pointer;
+}
+
+.scientific-domain {
+  display: block;
+}
+
+.domain-score-good {
+  color: green;
+}
+
+.domain-score-normal {
 }
 
