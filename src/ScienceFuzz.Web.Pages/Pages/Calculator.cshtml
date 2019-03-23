@@ -12,56 +12,69 @@
 <main class="container-fluid calculator-main-content">
     <div class="row">
         <div class="col col-12 col-lg-6">
-            <section class="shadow-lg publication">
-                <header class="text-center">
-                    <h3>Instructions</h3>
-                </header>
-                <hr>
-                <div>
-                    <ol>
-                        <li>Download '.csv' file containing sample data.</li>
-                        <li>Modify downloaded file with your own data.</li>
-                        <li>Upload modified file for processing.</li>
-                        <li>See your results!</li>
-                    </ol>
-                </div>
-                <hr>
-                <form method="post" enctype="multipart/form-data">
-                    <div class="row text-center">
-                        <div asp-validation-summary="All" style="        color: red"></div>
-                        <div class="col"><a class="btn btn-primary btn-block" asp-controller="Sample" asp-action="GetSample">Sample&nbsp;<i class="fas fa-download"></i>&nbsp;</a></div>
-                        <div class="col"><label>Upload your data&nbsp;</label><i class="fas fa-upload"></i><input asp-for="CsvData"></div>
-                        <div class="col"><button class="btn btn-success btn-block" type="submit">Calculate&nbsp;<i class="fas fa-check"></i></button></div>
-                    </div>
-                </form>
-            </section>
-            <section class="shadow-lg publication">
-                <div>
-                    <div class="form-group">
-                        <label class="publication-label">Journal</label>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin facilisis rutrum. Fusce metus turpis, sollicitudin sit amet faucibus quis, viverra id mauris.</p>
+            @if (Model.Journals.Count() == 0)
+            {
+                <section class="shadow-lg publication" style="        margin-bottom: 100px">
+                    <header class="text-center">
+                        <h3>Instructions</h3>
+                    </header>
+                    <hr>
+                    <div>
+                        <ol>
+                            <li>Download '.csv' file containing sample data.</li>
+                            <li>Modify downloaded file with your own data.</li>
+                            <li>Upload modified file for processing.</li>
+                            <li>See your results!</li>
+                        </ol>
                     </div>
                     <hr>
-                    <div class="form-group">
-                        <label class="publication-label">Amount of contributions</label>
-                        <p><strong>2</strong>&nbsp;contribution(s)</p>
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <label class="publication-label">Scientific domains score</label>
-                        <div class="form-row">
-                            <div class="col">
-                                <span class="scientific-domain"><i class="fas fa-wrench"></i>&nbsp;Technology:&nbsp;<strong class="domain-score-good">0.66</strong>&nbsp;</span><span class="scientific-domain"><i class="fas fa-medkit"></i>&nbsp;Health:&nbsp;<strong>0</strong></span>
-                                <span class="scientific-domain"><i class="fas fa-search"></i>&nbsp;Exact:&nbsp;<strong>0</strong></span><span class="scientific-domain"><i class="fas fa-cloud-sun-rain"></i>&nbsp;Natural:&nbsp;<strong>0</strong></span>
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row text-center">
+                            <div asp-validation-summary="All" style="        color: red"></div>
+                            <div class="col"><a class="btn btn-primary btn-block" asp-controller="Sample" asp-action="GetSample">Sample&nbsp;<i class="fas fa-download"></i>&nbsp;</a></div>
+                            <div class="col"><label>Upload your data&nbsp;</label><i class="fas fa-upload"></i><input asp-for="CsvFile"></div>
+                            <div class="col"><button class="btn btn-success btn-block" type="submit">Calculate&nbsp;<i class="fas fa-check"></i></button></div>
+                        </div>
+                    </form>
+                </section>
+            }
+            else
+            {
+                @foreach (var journal in Model.Journals)
+                {
+                    <section class="shadow-lg publication">
+                        <div>
+                            <div class="form-group">
+                                <label class="publication-label">Journal</label>
+                                <p>@journal.Title</p>
                             </div>
-                            <div class="col">
-                                <span class="scientific-domain"><i class="fas fa-book"></i>&nbsp;Humanities:&nbsp;<strong>0</strong></span><span class="scientific-domain"><i class="fas fa-landmark"></i>&nbsp;Arts:&nbsp;<strong>0</strong></span>
-                                <span class="scientific-domain"><i class="fas fa-users"></i>&nbsp;Social:&nbsp;<strong class="domain-score-good">0.78</strong></span><span class="scientific-domain"><i class="fas fa-leaf"></i>&nbsp;Agriculture:&nbsp;<strong>0</strong></span>
+                            <hr>
+                            <div class="form-group">
+                                <label class="publication-label">Amount of contributions</label>
+                                <p><strong>@journal.Contributions</strong>&nbsp;contribution(s)</p>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label class="publication-label">Scientific domains score</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <span class="scientific-domain"><i class="fas fa-wrench"></i>&nbsp;Technology:&nbsp;<strong class="@journal.Technology.Class">@journal.Technology.Value</strong>&nbsp;</span>
+                                        <span class="scientific-domain"><i class="fas fa-medkit"></i>&nbsp;Health:&nbsp;<strong class="@journal.Health.Class">@journal.Health.Value</strong></span>
+                                        <span class="scientific-domain"><i class="fas fa-search"></i>&nbsp;Exact:&nbsp;<strong class="@journal.Exact.Class">@journal.Exact.Value</strong></span>
+                                        <span class="scientific-domain"><i class="fas fa-cloud-sun-rain"></i>&nbsp;Natural:&nbsp;<strong class="@journal.Natural.Class">@journal.Natural.Value</strong></span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="scientific-domain"><i class="fas fa-book"></i>&nbsp;Humanities:&nbsp;<strong class="@journal.Humanities.Class">@journal.Humanities.Value</strong></span>
+                                        <span class="scientific-domain"><i class="fas fa-landmark"></i>&nbsp;Arts:&nbsp;<strong class="@journal.Arts.Class">@journal.Arts.Value</strong></span>
+                                        <span class="scientific-domain"><i class="fas fa-users"></i>&nbsp;Social:&nbsp;<strong class="@journal.Social.Class">@journal.Social.Value</strong></span>
+                                        <span class="scientific-domain"><i class="fas fa-leaf"></i>&nbsp;Agriculture:&nbsp;<strong class="@journal.Agriculture.Class">@journal.Agriculture.Value</strong></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
+                    </section>
+                }
+            }
         </div>
         <div class="col col-12 col-lg-6">
             <section class="chart">
