@@ -115,7 +115,10 @@ namespace ScienceFuzz.Web.Pages.Pages
             {
                 foreach (var domain in journal.Domains)
                 {
-                    Scores[domain.Name] = S(Scores[domain.Name] * A, domain.Value * A) * journal.Contributions;
+                    for (int i = 0; i < journal.Contributions; i++)
+                    {
+                        Scores[domain.Name] = S(Scores[domain.Name], domain.Value * A);
+                    }
                 }
             }
         }
