@@ -9,7 +9,7 @@
     <link href="assets/css/calculator.css" rel="stylesheet" />
 }
 
-<div class="modal fade modal-fullscreen" id="myModal">
+<div class="modal fade" id="myModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,7 +107,6 @@
     <script>
         $(document).ready(function () {
             initChart(@Model.ResultsJSON);
-            $('#myModal').fullscreen();
         });
     </script>
 }
