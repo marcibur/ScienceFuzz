@@ -4,8 +4,17 @@
     ViewData["Title"] = "T-SNE";
 }
 
+@section CSS
+{
+<link href="~/assets/css/loader.css" rel="stylesheet" />
+}
+
 <div class="container" style="        margin-top: 10px;
         padding: 20px">
+    <div class="loader text-center">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <h4>Obliczanie ...</h4>
+    </div>
     <canvas class="tsne-chart"></canvas>
 </div>
 
@@ -16,6 +25,10 @@
 <script src="assets/js/chart.js"></script>
 <script src="assets/js/tsne-chart.js"></script>
 <script>
+
+    function hideLoader() {
+        $('.loader').css('display', 'none');
+    };
 
     function randColor() {
         var r = Math.random() * 255;
@@ -97,20 +110,20 @@
                 label: 'Rehabilitant',
                 data: [0.0374, 0.1109, 0.5445, 0, 0, 0.0394, 0, 0]
             },
-            //{
-            //    label: 'Chemik',
-            //    data: [0.0109, 0.0509, 0.3681, 0.4479, 0.974, 0.9029, 0.1313, 0]
-            //}
+            {
+                label: 'Chemik',
+                data: [0.0109, 0.0509, 0.3681, 0.4479, 0.974, 0.9029, 0.1313, 0]
+            }
         ];
 
         var opt = {};
         opt.epsilon = 100;
-        opt.perplexity = 2;
+        opt.perplexity = 3;
         opt.dim = 2;
 
         var tsne = new tsnejs.tSNE(opt);
         var dists = testData_to_dists(testData);
-        tsne.initDataDist(dists);
+        tsne.initDataRaw(dists);
 
         for (var k = 0; k < 100000; k++) {
             tsne.step();
@@ -127,6 +140,7 @@
 
 
         initChart(chartData);
+        hideLoader();
     });
 </script>
 }
