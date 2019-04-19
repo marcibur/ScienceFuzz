@@ -14,8 +14,14 @@
     <div class="loader text-center">
         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         <h4>Obliczanie ...</h4>
+        <h5>To może potrwać do około 5 minut</h5>
     </div>
-    <canvas class="tsne-chart"></canvas>
+    <div>
+        <canvas class="tsne-person-chart"></canvas>
+    </div>
+    <div>
+        <canvas class="tsne-group-chart"></canvas>
+    </div>
 </div>
 
 
@@ -44,6 +50,29 @@
         };
     }
 
+
+
+    function personData_to_groupData(personData, amount) {
+        var result = new Array();
+
+        for (var i = 0; i < personData.length; i++) {
+
+            var dataset = {};
+            dataset.label = personData[i].label;
+            dataset.data = new Array();
+
+            for (var j = 0; j < amount; j++) {
+                dataset.data.push(personData[i].data);
+            }
+
+            result.push(dataset);
+        }
+
+        return result;
+    };
+
+
+
     function testData_to_dists(testData) {
         var arr = new Array();
 
@@ -71,9 +100,52 @@
         return arr;
     };
 
+
+
+    function groupData_to_dists(groupData) {
+        var arr = new Array();
+
+        groupData.forEach(function (test) {
+            test.data.forEach(function (x) {
+                arr.push(x);
+            });
+        });
+
+        return arr;
+    };
+
+    function solution_to_groupChartData(groupData, solutionData) {
+        var result = new Array();
+
+        for (var i = 0; i < groupData.length; i++) {
+
+            var colors = randColor();
+
+            var dataset = {};
+            dataset.label = groupData[i].label + ' x ' + groupData.length;
+            dataset.backgroundColor = colors.color;
+            dataset.hoverBackgroundColor = colors.hover;
+            dataset.data = new Array();
+
+            for (var j = i * groupData.length; j < i * groupData.length + groupData.length; j++) {
+                dataset.data.push({
+                    x: solutionData[j][0],
+                    y: solutionData[j][1],
+                    r: 2
+                });
+            }
+
+            result.push(dataset);
+        }
+
+        return result;
+    };
+
+
+
     $(document).ready(function () {
 
-        var testData = [
+        var personData = [
             {
                 label: 'WD',
                 data: [0.0346, 0.068, 0.1206, 0.009, 0.5625, 0.0355, 0, 0]
@@ -116,30 +188,47 @@
             }
         ];
 
+
+
+
         var opt = {};
-        opt.epsilon = 100;
+        opt.epsilon = 10;
         opt.perplexity = 3;
         opt.dim = 2;
 
+
+
         var tsne = new tsnejs.tSNE(opt);
-        var dists = testData_to_dists(testData);
+        var dists = testData_to_dists(personData);
         tsne.initDataRaw(dists);
 
         for (var k = 0; k < 100000; k++) {
             tsne.step();
         }
 
-
-
-        var Y = tsne.getSolution();
-        console.log('SOLUTION: ', Y);
-
-        var chartData = solution_to_chartData(testData, Y);
-        console.log('CHART DATA: ', chartData);
+        var solution = tsne.getSolution();
+        var chartData = solution_to_chartData(personData, solution);
+        initChart('tsne-person-chart', 'T-SNE dla pojedynczych naukowców', chartData);
 
 
 
-        initChart(chartData);
+        var groupData = personData_to_groupData(personData, 10);
+        //console.log('GROUP: ', groupData);
+        tsne = new tsnejs.tSNE(opt);
+        dists = groupData_to_dists(groupData);
+        tsne.initDataRaw(dists);
+
+        for (var k = 0; k < 100000; k++) {
+            tsne.step();
+        }
+
+        solution = tsne.getSolution();
+        console.log('SOLUTION: ', solution);
+        var chartData = solution_to_groupChartData(groupData, solution);
+        initChart('tsne-group-chart', 'T-SNE dla grup naukowców z identycznymi kontrybucjami', chartData);
+
+
+
         hideLoader();
     });
 </script>

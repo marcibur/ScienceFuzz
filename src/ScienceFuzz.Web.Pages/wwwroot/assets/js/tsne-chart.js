@@ -1,7 +1,7 @@
-function initChart(chartData) {
-    console.log('Initializing tsne-chart with data: ', null);
-    var chart = $('.tsne-chart');
-    console.log(chart);
+function initChart(className, title, chartData) {
+
+    console.log('Initializing ' + className + ' with data: ', chartData);
+    var chart = $('.' + className);
 
     new Chart(chart, {
         type: 'bubble',
@@ -11,7 +11,7 @@ function initChart(chartData) {
         options: {
             title: {
                 display: true,
-                text: 'T-SNE',
+                text: title,
                 fontSize: 20
             },
             legend: {
