@@ -21,13 +21,12 @@ namespace ScienceFuzz.Web.Pages.Pages
     {
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Nazwisko autora jest wymagane.")]
             public string AuthorSurname { get; set; }
 
-            [Required]
             public string FormalTypes { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Plik '.rtf' jest wymagany")]
             [ValidFileExtensions("rtf")]
             public IFormFile Rtf { get; set; }
         }
@@ -49,18 +48,19 @@ namespace ScienceFuzz.Web.Pages.Pages
             }
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var isoEncoding = Encoding.GetEncoding("iso-8859-2");
+            var iso = Encoding.GetEncoding("iso-8859-2");
+            var utf8 = Encoding.GetEncoding("utf-8");
 
-            string rtvString = string.Empty;
+            string rtfString = string.Empty;
 
             using (var stream = Input.Rtf.OpenReadStream())
             {
-                rtvString = await new StreamReader(stream, isoEncoding).ReadToEndAsync();
-                rtvString = HttpUtility.HtmlDecode(rtvString).Replace(",", "");
+                rtfString = await new StreamReader(stream, iso).ReadToEndAsync();
+                rtfString = HttpUtility.HtmlDecode(rtfString);
             }
 
             var publicationRegex = new Regex(@"<BR> \d*\. <BR>.+?txt end");
-            var publicationStrings = publicationRegex.Matches(rtvString).Select(m => m.Value).ToArray();
+            var publicationStrings = publicationRegex.Matches(rtfString).Select(m => m.Value).ToArray();
 
             foreach (var publicationString in publicationStrings)
             {
@@ -97,6 +97,12 @@ namespace ScienceFuzz.Web.Pages.Pages
                 var title = titleRegex.Match(publicationString).Value
                     .Replace("Tytuł: </span>", "")
                     .Replace("<BR>", "")
+                    .Replace("<I>", "")
+                    .Replace("</I>", "")
+                    .Replace("<SUB>", "")
+                    .Replace("</SUB>", "")
+                    .Replace("<SUP>", "")
+                    .Replace("</SUP>", "")
                     .Trim();
 
                 var journalShortRegex = new Regex(@"Czasopismo: </span>.+?<BR>");
@@ -122,7 +128,7 @@ namespace ScienceFuzz.Web.Pages.Pages
             }
 
             var memory = new MemoryStream();
-            var writer = new StreamWriter(memory, isoEncoding);
+            var writer = new StreamWriter(memory, utf8);
             var csv = new CsvWriter(writer);
 
             csv.Configuration.CultureInfo = new CultureInfo("pl-PL");
@@ -132,7 +138,7 @@ namespace ScienceFuzz.Web.Pages.Pages
             writer.Flush();
             memory.Position = 0;
 
-            return File(memory, "file/csv", "data.csv");
+            return File(memory, "file/csv", $"{Input.Rtf.FileName.Split('.')[0]}.csv");
         }
     }
 }

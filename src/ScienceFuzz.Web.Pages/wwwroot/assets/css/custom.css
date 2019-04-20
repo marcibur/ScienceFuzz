@@ -22,3 +22,21 @@
   color: rgba(0, 0, 0, 0.75);
 }
 
+.span-required {
+  color: red;
+}
+
+.publication-label {
+  color: #3e8ce4;
+}
+
+.publication-label-file {
+  display: block;
+  color: #3e8ce4;
+}
+
+.main-heading {
+  color: #3e8ce4;
+  margin-bottom: 30px;
+}
+

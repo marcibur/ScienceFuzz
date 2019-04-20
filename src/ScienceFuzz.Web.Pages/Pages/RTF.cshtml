@@ -4,7 +4,117 @@
     ViewData["Title"] = "RTF";
 }
 
-<div class="container" style="margin-top:20px">
+@section CSS
+{
+<link href="~/assets/css/rtf.css" rel="stylesheet" />
+}
+
+<div role="dialog" tabindex="-1" class="modal fade" id="tutorial-modal">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <section>
+                    <section>
+                        <header>
+                            <h3>Pobranie danych z Expertus UMK</h3>
+                        </header>
+                        <article>
+                            <p>
+                                Do testowania wizualizacji osiągnięć naukowych wykorzustujemy dane znajdujące się w systemie UMK. <br />Aby pobrać dane, przejdź do aplikacji <a href="http://bg.cm.umk.pl/splendor/umk/" target="_blank">Expetrus UMK</a>, ustaw odpowiednie filtry
+                                i wyświetl interesujące Cię wyniki.
+                            </p>
+                            <div class="text-center"><img src="assets/img/tut/rtf-tut-1.png" class="tut-img" /></div>
+                            <p>Po odpowiednim przefiltrowaniu danych należy je pobrać klikając w odnośnik <strong>&#39;Pobranie pliku do edytora&#39;</strong> co spowoduje zapisanie danych na naszym lokalnym dysku w pliku o rozszerzeniu &#39;.rtf&#39;.</p>
+                            <div class="text-center"><img src="assets/img/tut/rtf-tut-2.png" class="tut-img" /></div>
+                        </article>
+                    </section>
+                    <section>
+                        <header>
+                            <hr />
+                            <h3>Czyszczenie danych</h3>
+                        </header>
+                        <article>
+                            <p>
+                                Pobrane dane znajdują się w pliku z rozszerzeniem &#39;.rtf&#39; co sprawia, że naszej aplikacji ciężko będzie odczytać zawarte w nim informacje. Plik zawiera też treści w różnych językach co wymaga zastosowania odpowiedniego kodowania. W
+                                celu ułatwienia pracy naszego systemu do wizualizacji osiągnięć naukowych należy przekonwertować oryginalny plik do formatu &#39;.csv&#39; i dokonać selekcji tylko i wyłącznie niezbędnych informacji. Dokonać tego można w następujący sposób:<br /><br />Wprowadź do formularza nazwisko naukowca którego dane chcesz zgromadzić, formalne kody typów publikacji które Cię interesują oraz pobrany wcześniej plik z Expertus UMK.
+                            </p>
+                            <div class="text-center"><img src="assets/img/tut/rtf-tut-3.png" class="tut-img" /></div>
+                            <p>Następnie naciśnij przycisk <strong>&#39;Parsuj i pobierz&#39;</strong>, aby pobrać wyczyszone dane w formacie &#39;.csv&#39;.</p>
+                        </article>
+                    </section>
+                    <section>
+                        <header>
+                            <hr />
+                            <h3>Gotowa próbka</h3>
+                        </header>
+                        <article>
+                            <p>
+                                W przypadku gdy nie potrzebujesz konkretnych danych, a chcesz tylko przetestować działanie aplikacji na gotowej próbce - naciśnij odnośnik <strong>&#39;Pobierz gotową próbkę danych&#39;</strong>, aby pobrać przygotowane wcześniej domyślne
+                                dane.
+                            </p>
+                            <div class="text-center"><img src="~/assets/img/tut/rtf-tut-4.png" class="tut-img" /></div>
+                        </article>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" style="        margin-top: 30px">
+    <header class="main-heading text-center">
+        <h2>Parsuj plik '.rtf' do '.csv'</h2>
+    </header>
+    <section>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+                <section class="shadow-lg rtf-section">
+                    <button class="btn btn-info help-btn" type="button" data-toggle="modal" data-target="#tutorial-modal">?</button>
+                    <form method="post" enctype="multipart/form-data" class="rtf-form">
+                        <div asp-validation-summary="All" style="        color: red"></div>
+                        <div class="form-group">
+                            <label asp-for="Input.AuthorSurname" class="publication-label">Nazwisko autora<span class="span-required">*</span></label>
+                            <input asp-for="Input.AuthorSurname" class="form-control" placeholder="np. Kowalski">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.FormalTypes" class="publication-label">Formalne kody publikacji</label>
+                            <input asp-for="Input.FormalTypes" class="form-control" placeholder="np. 002, 022, 031">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Rtf" class="publication-label-file">Plik danych '.rtf'<span class="span-required">*</span></label>
+                            <input asp-for="Input.Rtf">
+                        </div>
+                        <div class="form-group btn-submit-group">
+                            <button class="btn btn-success btn-block btn-lg" type="submit">Parsuj i pobierz&nbsp;<i class="fas fa-cogs"></i></button>
+                        </div>
+                        <hr>
+                        <p class="text-center">LUB</p>
+                        <hr>
+                        <div class="form-group text-center or-link-group"><a href="#">Pobierz gotową próbkę danych&nbsp;<i class="fas fa-file-csv"></i></a></div>
+                    </form>
+                </section>
+            </div>
+            <div class="col"></div>
+        </div>
+    </section>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="container" style="        margin-top: 20px">
     <section>
         <form class="text-center" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All"></div>
@@ -25,4 +135,4 @@
             </div>
         </form>
     </section>
-</div>
+</div>*@
