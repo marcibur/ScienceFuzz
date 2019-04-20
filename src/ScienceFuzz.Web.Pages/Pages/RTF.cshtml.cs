@@ -48,17 +48,15 @@ namespace ScienceFuzz.Web.Pages.Pages
                 return Page();
             }
 
-            string rtvString = string.Empty;
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var isoEncoding = Encoding.GetEncoding("iso-8859-2");
 
+            string rtvString = string.Empty;
+
             using (var stream = Input.Rtf.OpenReadStream())
             {
-
-
                 rtvString = await new StreamReader(stream, isoEncoding).ReadToEndAsync();
-                rtvString = HttpUtility.HtmlDecode(rtvString);
+                rtvString = HttpUtility.HtmlDecode(rtvString).Replace(",", "");
             }
 
             var publicationRegex = new Regex(@"<BR> \d*\. <BR>.+?txt end");
@@ -86,9 +84,13 @@ namespace ScienceFuzz.Web.Pages.Pages
                    .Trim();
 
                 if (!string.IsNullOrWhiteSpace(Input.FormalTypes) &&
-                    !Input.FormalTypes.Split(',').Contains(formalType))
+                   !Input.FormalTypes.Split(',').Contains(formalType))
                 {
                     continue;
+                }
+                else
+                {
+                    formalType = string.Concat("=\"", formalType, "\"");
                 }
 
                 var titleRegex = new Regex(@"Tytuł: </span>.+?<BR>");
@@ -125,8 +127,9 @@ namespace ScienceFuzz.Web.Pages.Pages
 
             csv.Configuration.CultureInfo = new CultureInfo("pl-PL");
             csv.Configuration.RegisterClassMap<PublicationMap>();
-
             csv.WriteRecords(Publications);
+
+            writer.Flush();
             memory.Position = 0;
 
             return File(memory, "file/csv", "data.csv");
