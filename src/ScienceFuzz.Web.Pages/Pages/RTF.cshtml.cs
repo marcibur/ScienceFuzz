@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ScienceFuzz.Models;
+using ScienceFuzz.Web.Pages.CsvMaps;
+using ScienceFuzz.Web.Pages.Tools;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ScienceFuzz.Web.Pages.Pages
 {
@@ -23,7 +28,8 @@ namespace ScienceFuzz.Web.Pages.Pages
             public string FormalTypes { get; set; }
 
             [Required]
-            public IFormFile Rtv { get; set; }
+            [ValidFileExtensions("rtf")]
+            public IFormFile Rtf { get; set; }
         }
 
 
@@ -44,9 +50,15 @@ namespace ScienceFuzz.Web.Pages.Pages
 
             string rtvString = string.Empty;
 
-            using (var stream = Input.Rtv.OpenReadStream())
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var isoEncoding = Encoding.GetEncoding("iso-8859-2");
+
+            using (var stream = Input.Rtf.OpenReadStream())
             {
-                rtvString = await new StreamReader(stream, Encoding.UTF8).ReadToEndAsync();
+
+
+                rtvString = await new StreamReader(stream, isoEncoding).ReadToEndAsync();
+                rtvString = HttpUtility.HtmlDecode(rtvString);
             }
 
             var publicationRegex = new Regex(@"<BR> \d*\. <BR>.+?txt end");
@@ -54,7 +66,7 @@ namespace ScienceFuzz.Web.Pages.Pages
 
             foreach (var publicationString in publicationStrings)
             {
-                var authorsRegex = new Regex(@"Aut.:.+?<BR>");
+                var authorsRegex = new Regex(@"Aut\.:.+?<BR>");
                 var authors = authorsRegex.Match(publicationString).Value
                     .Replace("Aut.: </span>", "")
                     .Replace("<BR>", "")
@@ -79,7 +91,7 @@ namespace ScienceFuzz.Web.Pages.Pages
                     continue;
                 }
 
-                var titleRegex = new Regex(@"Tytu.+?<BR>");
+                var titleRegex = new Regex(@"Tytuł: </span>.+?<BR>");
                 var title = titleRegex.Match(publicationString).Value
                     .Replace("Tytuł: </span>", "")
                     .Replace("<BR>", "")
@@ -91,7 +103,7 @@ namespace ScienceFuzz.Web.Pages.Pages
                     .Replace("<BR>", "")
                     .Trim();
 
-                var journalFullRegex = new Regex(@"czasop.: </span>.+?<BR>");
+                var journalFullRegex = new Regex(@"Pełny tytuł czasop.: </span>.+?<BR>");
                 var journalFull = journalFullRegex.Match(publicationString).Value
                    .Replace("Pełny tytuł czasop.: </span>", "")
                    .Replace("<BR>", "")
@@ -107,7 +119,17 @@ namespace ScienceFuzz.Web.Pages.Pages
                 });
             }
 
-            return Page();
+            var memory = new MemoryStream();
+            var writer = new StreamWriter(memory, isoEncoding);
+            var csv = new CsvWriter(writer);
+
+            csv.Configuration.CultureInfo = new CultureInfo("pl-PL");
+            csv.Configuration.RegisterClassMap<PublicationMap>();
+
+            csv.WriteRecords(Publications);
+            memory.Position = 0;
+
+            return File(memory, "file/csv", "data.csv");
         }
     }
 }
