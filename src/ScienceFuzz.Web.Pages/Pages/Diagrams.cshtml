@@ -1,0 +1,134 @@
+﻿@page
+@model ScienceFuzz.Web.Pages.Pages.DiagramsModel
+@{
+    ViewData["Title"] = "Diagramy";
+}
+
+@section CSS
+{
+    <link href="assets/css/diagrams.css" rel="stylesheet" />
+}
+
+<div class="container" style="margin-top:50px;margin-bottom:100px">
+    <section class="diagram-form-section shadow-lg">
+        <div>
+            <form method="post">
+                <div asp-validation-summary="All" style="color:red"></div>
+                <div class="form-group">
+                    <label class="publication-label">Naukowiec</label>
+                    <select asp-for="Input.Scientist" asp-items="Model.Scientists" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="publication-label">Czasopisma</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Dyscypliny_A&nbsp;</label>
+                                <input asp-for="Input.Disciplines_A" class="form-control d-inline inline-num">
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Dyscypliny_B&nbsp;</label>
+                                <input asp-for="Input.Disciplines_B" class="form-control d-inline inline-num">
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Dyscypliny_C&nbsp;</label>
+                                <input asp-for="Input.Disciplines_C" class="form-control d-inline inline-num">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="publication-label">Dyscypliny</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Dziedziny_A&nbsp;</label>
+                                <input asp-for="Input.Domains_A" class="form-control d-inline inline-num">
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Dziedziny_B&nbsp;</label>
+                                <input asp-for="Input.Domains_B" class="form-control d-inline inline-num">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="publication-label">T-SNE</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Epsilon &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input asp-for="Input.Epsilon" class="form-control d-inline inline-num">
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Perplexity &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input asp-for="Input.Perplexity" class="form-control d-inline inline-num">
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Dimensionality &nbsp;</label>
+                                <input asp-for="Input.Dimensionality" class="form-control d-inline inline-num">
+                            </div>
+                            <div class="form-group">
+                                <label class="d-inline">Iterations &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input asp-for="Input.Iterations" class="form-control d-inline inline-num">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col col-12 col-md-2"></div>
+                    <div class="col col-12 col-md-8">
+                        <button class="btn btn-success btn-block btn-lg" type="submit">Oblicz&nbsp;<i class="fas fa-cogs"></i></button>
+                    </div>
+                    <div class="col col-12 col-md-2"></div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+@if (Model.Processed)
+{
+    <div class="container-fluid">
+        <hr>
+        <section class="diagram-section">
+            <header class="text-center diagram-header">
+                <h1>Dyscypliny</h1>
+            </header>
+            <div class="row">
+                <div class="col col-lg-6 diagram-col">
+                    <div><canvas id="chart-disciplines-bars"></canvas></div>
+                </div>
+                <div class="col col-lg-6 diagram-col">
+                    <div><canvas id="chart-disciplines-radar"></canvas></div>
+                </div>
+            </div>
+        </section>
+        <hr>
+        <section class="diagram-section">
+            <header class="text-center diagram-header">
+                <h1>Dziedziny</h1>
+            </header>
+            <div class="row">
+                <div class="col col-lg-6 diagram-col">
+                    <div><canvas id="chart-domains-bars"></canvas></div>
+                </div>
+                <div class="col col-lg-6 diagram-col">
+                    <div><canvas id="chart-domains-radar"></canvas></div>
+                </div>
+            </div>
+        </section>
+        <hr>
+    </div>
+    <div class="container">
+        <section class="diagram-section">
+            <header class="text-center diagram-header">
+                <h1>T-SNE</h1>
+            </header>
+            <div><canvas id="chart-tsne"></canvas></div>
+        </section>
+    </div>
+}
+
+@section Scripts
+{
+    <script src="assets/js/chart.js"></script>
+    <script src="assets/js/diagrams.js"></script>
+}
