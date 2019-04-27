@@ -32,6 +32,12 @@ namespace ScienceFuzz.Web.Pages
                 InMemoryData.Journals = csv.GetRecords<Journal>().ToList();
             }
 
+            using (var reader = new StreamReader(@"wwwroot\init\disciplines.csv", windowsEncoding))
+            using (var csv = new CsvReader(reader))
+            {
+                InMemoryData.Disciplines = csv.GetRecords<Discipline>().ToList();
+            }
+
 
 
             host.Run();
