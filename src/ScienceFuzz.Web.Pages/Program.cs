@@ -16,14 +16,23 @@ namespace ScienceFuzz.Web.Pages
             var host = CreateWebHostBuilder(args).Build();
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var iso = Encoding.GetEncoding("Windows-1250");
+            var windowsEncoding = Encoding.GetEncoding("Windows-1250");
 
-            using (var reader = new StreamReader(@"wwwroot\init\publications.csv", iso))
+
+
+            using (var reader = new StreamReader(@"wwwroot\init\publications.csv", windowsEncoding))
             using (var csv = new CsvReader(reader))
             {
-                //csv.Configuration.RegisterClassMap<PublicationMap>();
                 InMemoryData.Publications = csv.GetRecords<Publication>().ToList();
             }
+
+            using (var reader = new StreamReader(@"wwwroot\init\journals.csv", windowsEncoding))
+            using (var csv = new CsvReader(reader))
+            {
+                InMemoryData.Journals = csv.GetRecords<Journal>().ToList();
+            }
+
+
 
             host.Run();
         }

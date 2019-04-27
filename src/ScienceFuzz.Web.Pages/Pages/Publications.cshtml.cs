@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ScienceFuzz.Web.Pages.Pages
 {
-    public class ScientistsModel : PageModel
+    public class PublicationsModel : PageModel
     {
         public List<SelectListItem> Scientists { get; } = new List<SelectListItem>(
             InMemoryData.Publications
