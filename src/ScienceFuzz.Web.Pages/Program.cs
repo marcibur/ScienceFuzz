@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CsvHelper;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using ScienceFuzz.Data.InMemory;
+using ScienceFuzz.Models;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace ScienceFuzz.Web.Pages
 {
@@ -14,7 +13,19 @@ namespace ScienceFuzz.Web.Pages
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var host = CreateWebHostBuilder(args).Build();
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var iso = Encoding.GetEncoding("Windows-1250");
+
+            using (var reader = new StreamReader(@"wwwroot\init\publications.csv", iso))
+            using (var csv = new CsvReader(reader))
+            {
+                //csv.Configuration.RegisterClassMap<PublicationMap>();
+                InMemoryData.Publications = csv.GetRecords<Publication>().ToList();
+            }
+
+            host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

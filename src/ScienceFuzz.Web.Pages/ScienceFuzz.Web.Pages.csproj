@@ -16,6 +16,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\ScienceFuzz.Data.InMemory\ScienceFuzz.Data.InMemory.csproj" />
     <ProjectReference Include="..\..\lib\ScienceFuzz.Models\ScienceFuzz.Models.csproj" />
   </ItemGroup>
 
