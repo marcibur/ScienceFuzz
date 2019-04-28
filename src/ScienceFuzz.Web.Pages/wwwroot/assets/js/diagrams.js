@@ -27,7 +27,7 @@ function initRadarDisciplinesChart(labels, data) {
             scale: {
                 ticks: {
                     suggestedMin: 0,
-                    max: 1
+                    //max: 1
                 }
             }
         }
@@ -63,7 +63,7 @@ function initBarDisciplinesChart(labels, data) {
                     display: true,
                     ticks: {
                         suggestedMin: 0, 
-                        max: 1
+                        //max: 1
                     }
                 }]
             }
@@ -98,7 +98,7 @@ function initRadarDomainsChart(labels, data) {
             scale: {
                 ticks: {
                     suggestedMin: 0,
-                    max: 1
+                    //max: 1
                 }
             }
         }
@@ -134,7 +134,7 @@ function initBarDomainsChart(labels, data) {
                     display: true,
                     ticks: {
                         suggestedMin: 0,
-                        max: 1
+                        //max: 1
                     }
                 }]
             }

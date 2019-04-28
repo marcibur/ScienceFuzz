@@ -199,16 +199,17 @@ namespace ScienceFuzz.Web.Pages.Pages
                 var cKeyNames = journal.DisciplinesCString.Trim().ToLower().Split(',');
                 foreach (var cKeyName in cKeyNames)
                 {
-                    if (!string.IsNullOrWhiteSpace(cKeyName))
+                    var keyName = cKeyName.Trim();
+                    if (!string.IsNullOrWhiteSpace(keyName))
                     {
-                        if (!contributions.ContainsKey(cKeyName))
+                        if (!contributions.ContainsKey(keyName))
                         {
-                            contributions[cKeyName] = new List<double>();
-                            contributions[cKeyName].Add(Input.Disciplines_C);
+                            contributions[keyName] = new List<double>();
+                            contributions[keyName].Add(Input.Disciplines_C);
                         }
                         else
                         {
-                            contributions[cKeyName].Add(Input.Disciplines_C);
+                            contributions[keyName].Add(Input.Disciplines_C);
                         }
                     }
                 }
@@ -248,11 +249,12 @@ namespace ScienceFuzz.Web.Pages.Pages
 
         private double Calculate(List<double> scores)
         {
+            const double A = 0.01;
             double result = 0;
 
             foreach (var score in scores)
             {
-                result = S(result, score);
+                result = S(result, score * A);
             }
 
             return result;
