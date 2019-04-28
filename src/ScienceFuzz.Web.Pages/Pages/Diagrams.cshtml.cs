@@ -96,8 +96,8 @@ namespace ScienceFuzz.Web.Pages.Pages
                 View.DisciplinesLabelsJson = DisciplinesToLablesJson(View.Disciplines);
                 View.DisciplinesValuesJson = DisciplinesToValuesJson(View.Disciplines);
 
-                var domainContributions = GetDomainContributions(View.Disciplines);
-                View.Domains = CalculateDomainResults(domainContributions);
+                //var domainContributions = GetDomainContributions(View.Disciplines);
+                View.Domains = CalculateDomainResults(View.Disciplines);
                 View.DomainsLabelsJson = DomainsToLabelsJson(View.Domains);
                 View.DomainsValuesJson = DomainsToValuesJson(View.Domains);
 
@@ -286,77 +286,133 @@ namespace ScienceFuzz.Web.Pages.Pages
             public double Result { get; set; }
         }
 
-        private Dictionary<string, List<double>> GetDomainContributions(IEnumerable<DisciplineResult> disciplinesResults)
+        //private Dictionary<string, List<double>> GetDomainContributions(IEnumerable<DisciplineResult> disciplinesResults)
+        //{
+        //    var contributions = new Dictionary<string, List<double>>();
+
+        //    foreach (var result in disciplinesResults)
+        //    {
+        //        var discipline = InMemoryData.Disciplines
+        //            .FirstOrDefault(x => x.Title.Trim().ToLower() == result.Name.Trim().ToLower());
+
+        //        if (discipline != null)
+        //        {
+        //            var domainA = discipline.DomainsA.Trim().ToLower();
+
+        //            if (!string.IsNullOrWhiteSpace(domainA))
+        //            {
+        //                if (!contributions.ContainsKey(domainA))
+        //                {
+        //                    contributions[domainA] = new List<double>();
+        //                    contributions[domainA].Add(Input.Domains_A);
+        //                }
+        //                else
+        //                {
+        //                    contributions[domainA].Add(Input.Domains_A);
+        //                }
+        //            }
+
+        //            var domainB = discipline.DomainsB.Trim().ToLower();
+
+        //            if (!string.IsNullOrWhiteSpace(domainB))
+        //            {
+        //                if (!contributions.ContainsKey(domainB))
+        //                {
+        //                    contributions[domainB] = new List<double>();
+        //                    contributions[domainB].Add(Input.Domains_B);
+        //                }
+        //                else
+        //                {
+        //                    contributions[domainB].Add(Input.Domains_B);
+        //                }
+        //            }
+        //        }
+
+        //    }
+
+        //    foreach (var domain in InMemoryData.Domains)
+        //    {
+        //        if (!contributions.ContainsKey(domain))
+        //        {
+        //            contributions[domain] = new List<double>();
+        //            contributions[domain].Add(0);
+        //        }
+        //    }
+
+        //    return contributions;
+        //}
+
+        //private IEnumerable<DomainResult> CalculateDomainResults(Dictionary<string, List<double>> domainContributions)
+        //{
+        //    var results = new List<DomainResult>();
+
+        //    foreach (var contribution in domainContributions)
+        //    {
+        //        var result = Calculate(contribution.Value);
+        //        results.Add(new DomainResult
+        //        {
+        //            Name = contribution.Key.Trim(),
+        //            Result = result
+        //        });
+        //    }
+
+        //    return results.OrderBy(x => x.Name).ToList();
+        //}
+
+        private IEnumerable<DomainResult> CalculateDomainResults(IEnumerable<DisciplineResult> disciplinesResults)
         {
-            var contributions = new Dictionary<string, List<double>>();
+            var domainResults = new List<DomainResult>();
 
-            foreach (var result in disciplinesResults)
+            foreach (var discipline in disciplinesResults)
             {
-                var discipline = InMemoryData.Disciplines
-                    .FirstOrDefault(x => x.Title.Trim().ToLower() == result.Name.Trim().ToLower());
-
-                if (discipline != null)
+                if (!string.IsNullOrWhiteSpace(discipline.DomainsA))
                 {
-                    var domainA = discipline.DomainsA.Trim().ToLower();
-
-                    if (!string.IsNullOrWhiteSpace(domainA))
+                    if (!domainResults.Any(x => x.Name == discipline.DomainsA))
                     {
-                        if (!contributions.ContainsKey(domainA))
+                        domainResults.Add(new DomainResult
                         {
-                            contributions[domainA] = new List<double>();
-                            contributions[domainA].Add(Input.Domains_A);
-                        }
-                        else
-                        {
-                            contributions[domainA].Add(Input.Domains_A);
-                        }
+                            Name = discipline.DomainsA,
+                            Result = discipline.Result * Input.Domains_A
+                        });
                     }
-
-                    var domainB = discipline.DomainsB.Trim().ToLower();
-
-                    if (!string.IsNullOrWhiteSpace(domainB))
+                    else
                     {
-                        if (!contributions.ContainsKey(domainB))
-                        {
-                            contributions[domainB] = new List<double>();
-                            contributions[domainB].Add(Input.Domains_B);
-                        }
-                        else
-                        {
-                            contributions[domainB].Add(Input.Domains_B);
-                        }
+                        var result = domainResults.Single(x => x.Name == discipline.DomainsA);
+                        result.Result += discipline.Result * Input.Domains_A;
                     }
                 }
 
+                if (!string.IsNullOrWhiteSpace(discipline.DomainsB))
+                {
+                    if (!domainResults.Any(x => x.Name == discipline.DomainsB))
+                    {
+                        domainResults.Add(new DomainResult
+                        {
+                            Name = discipline.DomainsB,
+                            Result = discipline.Result * Input.Domains_B
+                        });
+                    }
+                    else
+                    {
+                        var result = domainResults.Single(x => x.Name == discipline.DomainsB);
+                        result.Result += discipline.Result * Input.Domains_B;
+                    }
+                }
             }
 
             foreach (var domain in InMemoryData.Domains)
             {
-                if (!contributions.ContainsKey(domain))
+                if (!domainResults.Any(x => x.Name == domain))
                 {
-                    contributions[domain] = new List<double>();
-                    contributions[domain].Add(0);
+                    domainResults.Add(new DomainResult
+                    {
+                        Name = domain,
+                        Result = 0
+                    });
                 }
             }
 
-            return contributions;
-        }
-
-        private IEnumerable<DomainResult> CalculateDomainResults(Dictionary<string, List<double>> domainContributions)
-        {
-            var results = new List<DomainResult>();
-
-            foreach (var contribution in domainContributions)
-            {
-                var result = Calculate(contribution.Value);
-                results.Add(new DomainResult
-                {
-                    Name = contribution.Key.Trim(),
-                    Result = result
-                });
-            }
-
-            return results.OrderBy(x => x.Name).ToList();
+            return domainResults;
         }
 
         private string DomainsToLabelsJson(IEnumerable<DomainResult> domainResults)
