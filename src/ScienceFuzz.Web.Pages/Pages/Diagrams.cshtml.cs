@@ -43,15 +43,6 @@ namespace ScienceFuzz.Web.Pages.Pages
             public double Domains_A { get; set; } = 1;
             [Required]
             public double Domains_B { get; set; } = 0.5;
-
-            [Required]
-            public double Epsilon { get; set; } = 10;
-            [Required]
-            public double Perplexity { get; set; } = 3;
-            [Required]
-            public double Dimensionality { get; set; } = 2;
-            [Required]
-            public int Iterations { get; set; } = 10000;
         }
 
         [BindProperty]
@@ -61,6 +52,7 @@ namespace ScienceFuzz.Web.Pages.Pages
         public class ViewModel
         {
             public List<(Journal Journal, int Count)> Journals { get; set; } = new List<(Journal Journal, int Count)>();
+            public List<string> LostJournals { get; set; } = new List<string>();
 
             public List<DisciplineResult> Disciplines { get; set; } = new List<DisciplineResult>();
             public string DisciplinesLabelsJson { get; set; }
@@ -135,6 +127,13 @@ namespace ScienceFuzz.Web.Pages.Pages
                 if (journal != null)
                 {
                     journals.Add(journal);
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(journalFullTitle) && !View.LostJournals.Contains(journalFullTitle))
+                    {
+                        View.LostJournals.Add(journalFullTitle);
+                    }
                 }
             }
 
@@ -296,39 +295,45 @@ namespace ScienceFuzz.Web.Pages.Pages
 
                 if (discipline != null)
                 {
-                    var domainsA = discipline.DomainsA.Trim().ToLower().Split(',');
-                    foreach (var domain in domainsA)
+                    var domainA = discipline.DomainsA.Trim().ToLower();
+
+                    if (!string.IsNullOrWhiteSpace(domainA))
                     {
-                        if (!string.IsNullOrWhiteSpace(domain))
+                        if (!contributions.ContainsKey(domainA))
                         {
-                            if (!contributions.ContainsKey(domain))
-                            {
-                                contributions[domain] = new List<double>();
-                                contributions[domain].Add(Input.Domains_A);
-                            }
-                            else
-                            {
-                                contributions[domain].Add(Input.Domains_A);
-                            }
+                            contributions[domainA] = new List<double>();
+                            contributions[domainA].Add(Input.Domains_A);
+                        }
+                        else
+                        {
+                            contributions[domainA].Add(Input.Domains_A);
                         }
                     }
 
-                    var domainsB = discipline.DomainsB.Trim().ToLower().Split(',');
-                    foreach (var domain in domainsB)
+                    var domainB = discipline.DomainsB.Trim().ToLower();
+
+                    if (!string.IsNullOrWhiteSpace(domainB))
                     {
-                        if (!string.IsNullOrWhiteSpace(domain))
+                        if (!contributions.ContainsKey(domainB))
                         {
-                            if (!contributions.ContainsKey(domain))
-                            {
-                                contributions[domain] = new List<double>();
-                                contributions[domain].Add(Input.Domains_B);
-                            }
-                            else
-                            {
-                                contributions[domain].Add(Input.Domains_B);
-                            }
+                            contributions[domainB] = new List<double>();
+                            contributions[domainB].Add(Input.Domains_B);
+                        }
+                        else
+                        {
+                            contributions[domainB].Add(Input.Domains_B);
                         }
                     }
+                }
+
+            }
+
+            foreach (var domain in InMemoryData.Domains)
+            {
+                if (!contributions.ContainsKey(domain))
+                {
+                    contributions[domain] = new List<double>();
+                    contributions[domain].Add(0);
                 }
             }
 

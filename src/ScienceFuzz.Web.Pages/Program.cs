@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using ScienceFuzz.Data.InMemory;
 using ScienceFuzz.Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -50,10 +51,34 @@ namespace ScienceFuzz.Web.Pages
                 }
             }
 
+            var domains = new List<string>();
             foreach (var discipline in InMemoryData.Disciplines)
             {
+                var domainA = discipline.DomainsA.ToLower().Trim();
+
+                if (!string.IsNullOrWhiteSpace(domainA))
+                {
+                    if (!domains.Contains(domainA))
+                    {
+                        domains.Add(domainA);
+                    }
+                }
+
+                var domainB = discipline.DomainsB.ToLower().Trim();
+
+                if (!string.IsNullOrWhiteSpace(domainB))
+                {
+                    if (!domains.Contains(domainB))
+                    {
+                        domains.Add(domainB);
+                    }
+                }
 
             }
+
+            InMemoryData.Domains = domains;
+
+
 
             host.Run();
         }
