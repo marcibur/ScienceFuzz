@@ -8,5 +8,6 @@ namespace ScienceFuzz.Data.InMemory
         public static IEnumerable<Publication> Publications { get; set; }
         public static IEnumerable<Journal> Journals { get; set; }
         public static IEnumerable<Discipline> Disciplines { get; set; }
+        public static IEnumerable<string> Domains { get; set; }
     }
 }

@@ -50,7 +50,10 @@ namespace ScienceFuzz.Web.Pages
                 }
             }
 
+            foreach (var discipline in InMemoryData.Disciplines)
+            {
 
+            }
 
             host.Run();
         }

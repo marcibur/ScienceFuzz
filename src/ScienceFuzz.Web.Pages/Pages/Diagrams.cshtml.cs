@@ -237,7 +237,7 @@ namespace ScienceFuzz.Web.Pages.Pages
 
                 result.Add(new DisciplineResult
                 {
-                    Name = discipline.Key,
+                    Name = discipline.Key.Trim(),
                     Result = score,
                     DomainsA = domainsA,
                     DomainsB = domainsB
@@ -344,12 +344,12 @@ namespace ScienceFuzz.Web.Pages.Pages
                 var result = Calculate(contribution.Value);
                 results.Add(new DomainResult
                 {
-                    Name = contribution.Key,
+                    Name = contribution.Key.Trim(),
                     Result = result
                 });
             }
 
-            return results;
+            return results.OrderBy(x => x.Name).ToList();
         }
 
         private string DomainsToLabelsJson(IEnumerable<DomainResult> domainResults)
