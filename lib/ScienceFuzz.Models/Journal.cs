@@ -13,5 +13,7 @@ namespace ScienceFuzz.Models
 
         public IEnumerable<string> DisciplinesCEnum =>
             DisciplinesC.Split(';');
+
+        public override string ToString() => Title;
     }
 }

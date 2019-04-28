@@ -8,6 +8,7 @@
 .diagram-form-section {
   padding: 20px;
   background-color: white;
+  border: solid 1px gray;
 }
 
 .diagram-header {
@@ -20,5 +21,20 @@
 
 .diagram-col {
   margin-bottom: 50px;
+}
+
+.table-section {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 50px;
+  border: solid 1px gray;
+}
+
+.calc-table {
+  margin-bottom: 30px;
+}
+
+.table-header {
+  color: #3e8ce4;
 }
 

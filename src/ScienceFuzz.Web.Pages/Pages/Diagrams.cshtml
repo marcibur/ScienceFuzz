@@ -87,6 +87,106 @@
 @if (Model.Processed)
 {
     <div class="container-fluid">
+        <section class="table-section shadow-lg">
+            <section class="calc-table">
+                <header>
+                    <h4 class="table-header">Czasopisma</h4>
+                </header>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Tytuł</th>
+                                <th>Kontrybucje</th>
+                                <th>Dyscyplina_A [x @Model.Input.Disciplines_A]</th>
+                                <th>Dyscyplina_B [x @Model.Input.Disciplines_B]</th>
+                                <th>Dyscyplina_C [x @Model.Input.Disciplines_C]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var journalModel in Model.View.Journals)
+                            {
+                                <tr>
+                                    <td>@journalModel.Journal.Title</td>
+                                    <td>@journalModel.Count</td>
+                                    <td>@journalModel.Journal.DisciplineA</td>
+                                    <td>@journalModel.Journal.DisciplineB</td>
+                                    <td>@journalModel.Journal.DisciplinesCString</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="calc-table">
+                <header>
+                    <h4 class="table-header">Dyscypliny</h4>
+                </header>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nazwa</th>
+                                <th>Wynik</th>
+                                <th>x[A]</th>
+                                <th>x[B]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dyscyplina_1</td>
+                                <td>0.88</td>
+                                <td>Dziedzina_A_1, Dziedzina_A_2</td>
+                                <td>Dziedzina_B_1, Dziedzina_B_2</td>
+                            </tr>
+                            <tr>
+                                <td>Dyscyplina_1</td>
+                                <td>0.88</td>
+                                <td>Dziedzina_A_1, Dziedzina_A_2</td>
+                                <td>Dziedzina_B_1, Dziedzina_B_2</td>
+                            </tr>
+                            <tr>
+                                <td>Dyscyplina_1</td>
+                                <td>0.88</td>
+                                <td>Dziedzina_A_1, Dziedzina_A_2</td>
+                                <td>Dziedzina_B_1, Dziedzina_B_2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="calc-table">
+                <header>
+                    <h4 class="table-header">Dziedziny</h4>
+                </header>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nazwa</th>
+                                <th>Wynik</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dziedzina_1</td>
+                                <td>0.88</td>
+                            </tr>
+                            <tr>
+                                <td>Dziedzina_2</td>
+                                <td>0.67</td>
+                            </tr>
+                            <tr>
+                                <td>Dziedzina_3</td>
+                                <td>0.34</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </div>
+    <div class="container-fluid">
         <hr>
         <section class="diagram-section">
             <header class="text-center diagram-header">

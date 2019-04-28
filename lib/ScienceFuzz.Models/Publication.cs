@@ -16,5 +16,7 @@
         public string JournalShort { get; set; }
         public string JournalFull { get; set; }
         public string FormalType { get; set; }
+
+        public override string ToString() => Title;
     }
 }
