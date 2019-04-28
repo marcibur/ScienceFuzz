@@ -128,29 +128,20 @@
                             <tr>
                                 <th>Nazwa</th>
                                 <th>Wynik</th>
-                                <th>x[A]</th>
-                                <th>x[B]</th>
+                                <th>Dziedziny_A [x @Model.Input.Domains_A]</th>
+                                <th>Dziedziny_B [x @Model.Input.Domains_B]</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Dyscyplina_1</td>
-                                <td>0.88</td>
-                                <td>Dziedzina_A_1, Dziedzina_A_2</td>
-                                <td>Dziedzina_B_1, Dziedzina_B_2</td>
-                            </tr>
-                            <tr>
-                                <td>Dyscyplina_1</td>
-                                <td>0.88</td>
-                                <td>Dziedzina_A_1, Dziedzina_A_2</td>
-                                <td>Dziedzina_B_1, Dziedzina_B_2</td>
-                            </tr>
-                            <tr>
-                                <td>Dyscyplina_1</td>
-                                <td>0.88</td>
-                                <td>Dziedzina_A_1, Dziedzina_A_2</td>
-                                <td>Dziedzina_B_1, Dziedzina_B_2</td>
-                            </tr>
+                            @foreach (var discipline in Model.View.Disciplines)
+                            {
+                                <tr>
+                                    <td>@discipline.Name</td>
+                                    <td>@discipline.Result</td>
+                                    <td>@discipline.DomainsA</td>
+                                    <td>@discipline.DomainsB</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -231,4 +222,15 @@
 {
     <script src="assets/js/chart.js"></script>
     <script src="assets/js/diagrams.js"></script>
+    <script>
+        $(document).ready(function () {
+            var labels = '@Model.View.DisciplinesLabelsJson';
+
+            labels = $('<div/>').html(labels).text();
+            var labelArr = JSON.parse(labels);
+
+            initRadarDisciplinesChart(labelArr, @Model.View.DisciplinesValuesJson);
+            initBarDisciplinesChart(labelArr, @Model.View.DisciplinesValuesJson);
+          });
+    </script>
 }
