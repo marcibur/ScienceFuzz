@@ -18,7 +18,9 @@ namespace ScienceFuzz.Web.Pages.Pages
         {
             if (string.IsNullOrEmpty(Search))
             {
-                Disciplines = InMemoryData.Disciplines.ToList();
+                Disciplines = InMemoryData.Disciplines
+                    .OrderBy(x => x.Title)
+                        .ToList();
             }
             else
             {
@@ -26,7 +28,8 @@ namespace ScienceFuzz.Web.Pages.Pages
                     x.Title.Trim().ToLower().Contains(Search.Trim().ToLower()) ||
                     x.DomainsA.Trim().ToLower().Contains(Search.Trim().ToLower()) ||
                     x.DomainsB.Trim().ToLower().Contains(Search.Trim().ToLower()))
-                        .ToList();
+                        .OrderBy(x => x.Title)
+                            .ToList();
             }
         }
     }

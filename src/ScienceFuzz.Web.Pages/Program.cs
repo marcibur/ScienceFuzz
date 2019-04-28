@@ -24,18 +24,30 @@ namespace ScienceFuzz.Web.Pages
             using (var csv = new CsvReader(reader))
             {
                 InMemoryData.Publications = csv.GetRecords<Publication>().ToList();
+                foreach (var item in InMemoryData.Publications)
+                {
+                    item.Title = item.Title.Trim();
+                }
             }
 
             using (var reader = new StreamReader(@"wwwroot\init\journals.csv", windowsEncoding))
             using (var csv = new CsvReader(reader))
             {
                 InMemoryData.Journals = csv.GetRecords<Journal>().ToList();
+                foreach (var item in InMemoryData.Journals)
+                {
+                    item.Title = item.Title.Trim();
+                }
             }
 
             using (var reader = new StreamReader(@"wwwroot\init\disciplines.csv", windowsEncoding))
             using (var csv = new CsvReader(reader))
             {
                 InMemoryData.Disciplines = csv.GetRecords<Discipline>().ToList();
+                foreach (var item in InMemoryData.Disciplines)
+                {
+                    item.Title = item.Title.Trim();
+                }
             }
 
 

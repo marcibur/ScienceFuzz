@@ -7,7 +7,6 @@ using ScienceFuzz.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 
 namespace ScienceFuzz.Web.Pages.Pages
 {
@@ -62,9 +61,14 @@ namespace ScienceFuzz.Web.Pages.Pages
         public class ViewModel
         {
             public List<(Journal Journal, int Count)> Journals { get; set; } = new List<(Journal Journal, int Count)>();
+
             public List<DisciplineResult> Disciplines { get; set; } = new List<DisciplineResult>();
             public string DisciplinesLabelsJson { get; set; }
             public string DisciplinesValuesJson { get; set; }
+
+            public IEnumerable<DomainResult> Domains { get; set; } = new List<DomainResult>();
+            public string DomainsLabelsJson { get; set; }
+            public string DomainsValuesJson { get; set; }
         }
 
 
@@ -99,6 +103,11 @@ namespace ScienceFuzz.Web.Pages.Pages
                 View.Disciplines = CalculateDisciplines(diciplineContributions);
                 View.DisciplinesLabelsJson = DisciplinesToLablesJson(View.Disciplines);
                 View.DisciplinesValuesJson = DisciplinesToValuesJson(View.Disciplines);
+
+                var domainContributions = GetDomainContributions(View.Disciplines);
+                View.Domains = CalculateDomainResults(domainContributions);
+                View.DomainsLabelsJson = DomainsToLabelsJson(View.Domains);
+                View.DomainsValuesJson = DomainsToValuesJson(View.Domains);
 
                 Processed = true;
             }
@@ -151,7 +160,7 @@ namespace ScienceFuzz.Web.Pages.Pages
                 }
             }
 
-            View.Journals = models;
+            View.Journals = models.OrderBy(x => x.Journal.Title).ToList();
         }
 
         private Dictionary<string, List<double>> GetDisciplineContributions(IEnumerable<Journal> journals)
@@ -235,24 +244,8 @@ namespace ScienceFuzz.Web.Pages.Pages
                 });
             }
 
-            return result;
+            return result.OrderBy(x => x.Name).ToList();
         }
-
-        //private void Calculate(IEnumerable<Journal> journals)
-        //{
-        //    const double A = 0.01;
-        //
-        //    foreach (var journal in journals)
-        //    {
-        //        foreach (var domain in journal.Domains)
-        //        {
-        //            for (int i = 0; i < journal.Contributions; i++)
-        //            {
-        //                Scores[domain.Name] = S(Scores[domain.Name], domain.Value * A);
-        //            }
-        //        }
-        //    }
-        //}
 
         private double Calculate(List<double> scores)
         {
@@ -284,6 +277,93 @@ namespace ScienceFuzz.Web.Pages.Pages
             var result = disciplines.Select(x => x.Result).ToArray();
             var resultJson = JsonConvert.SerializeObject(result);
             return resultJson;
+        }
+
+        public class DomainResult
+        {
+            public string Name { get; set; }
+            public double Result { get; set; }
+        }
+
+        private Dictionary<string, List<double>> GetDomainContributions(IEnumerable<DisciplineResult> disciplinesResults)
+        {
+            var contributions = new Dictionary<string, List<double>>();
+
+            foreach (var result in disciplinesResults)
+            {
+                var discipline = InMemoryData.Disciplines
+                    .FirstOrDefault(x => x.Title.Trim().ToLower() == result.Name.Trim().ToLower());
+
+                if (discipline != null)
+                {
+                    var domainsA = discipline.DomainsA.Trim().ToLower().Split(',');
+                    foreach (var domain in domainsA)
+                    {
+                        if (!string.IsNullOrWhiteSpace(domain))
+                        {
+                            if (!contributions.ContainsKey(domain))
+                            {
+                                contributions[domain] = new List<double>();
+                                contributions[domain].Add(Input.Domains_A);
+                            }
+                            else
+                            {
+                                contributions[domain].Add(Input.Domains_A);
+                            }
+                        }
+                    }
+
+                    var domainsB = discipline.DomainsB.Trim().ToLower().Split(',');
+                    foreach (var domain in domainsB)
+                    {
+                        if (!string.IsNullOrWhiteSpace(domain))
+                        {
+                            if (!contributions.ContainsKey(domain))
+                            {
+                                contributions[domain] = new List<double>();
+                                contributions[domain].Add(Input.Domains_B);
+                            }
+                            else
+                            {
+                                contributions[domain].Add(Input.Domains_B);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return contributions;
+        }
+
+        private IEnumerable<DomainResult> CalculateDomainResults(Dictionary<string, List<double>> domainContributions)
+        {
+            var results = new List<DomainResult>();
+
+            foreach (var contribution in domainContributions)
+            {
+                var result = Calculate(contribution.Value);
+                results.Add(new DomainResult
+                {
+                    Name = contribution.Key,
+                    Result = result
+                });
+            }
+
+            return results;
+        }
+
+        private string DomainsToLabelsJson(IEnumerable<DomainResult> domainResults)
+        {
+            var labels = domainResults.Select(x => x.Name).ToArray();
+            var result = JsonConvert.SerializeObject(labels);
+            return result;
+        }
+
+        private string DomainsToValuesJson(IEnumerable<DomainResult> domainResults)
+        {
+            var values = domainResults.Select(x => x.Result).ToArray();
+            var result = JsonConvert.SerializeObject(values);
+            return result;
         }
     }
 }

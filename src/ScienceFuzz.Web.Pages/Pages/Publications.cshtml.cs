@@ -27,11 +27,17 @@ namespace ScienceFuzz.Web.Pages.Pages
         {
             if (string.IsNullOrEmpty(Author))
             {
-                Publications = InMemoryData.Publications.ToList();
+                Publications = InMemoryData.Publications
+                    .OrderBy(x => x.Author)
+                    .ThenBy(x => x.Title)
+                        .ToList();
             }
             else
             {
-                Publications = InMemoryData.Publications.Where(x => x.Author == Author).ToList();
+                Publications = InMemoryData.Publications
+                    .Where(x => x.Author == Author)
+                    .OrderBy(x => x.Title)
+                        .ToList();
             }
         }
     }

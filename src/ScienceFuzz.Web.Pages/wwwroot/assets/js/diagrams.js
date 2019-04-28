@@ -70,14 +70,15 @@ function initBarDisciplinesChart(labels, data) {
         }
     });
 }
-    
+
+function initRadarDomainsChart(labels, data) {
     var ctx = document.getElementById('chart-domains-radar');
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ["Humanities", "Social", "Health", "Technology", "Exact", "Natural", "Agriculture", "Arts"],
+            labels: labels,
             datasets: [{
-                data: [1, 2, 3, 4, 5, 6, 7, 8],
+                data: data,
                 backgroundColor: [
                     'rgba(13, 162, 0, .5)'
                 ],
@@ -91,40 +92,55 @@ function initBarDisciplinesChart(labels, data) {
             legend: {
                 display: false
             },
-            tooltips:{
+            tooltips: {
                 displayColors: false
+            },
+            scale: {
+                ticks: {
+                    suggestedMin: 0,
+                    max: 1
+                }
             }
         }
     });
+}
 
+function initBarDomainsChart(labels, data) {
     ctx = document.getElementById('chart-domains-bars');
+
+    var colors = new Array();
+    for (var i = 0; i < data.length; i++) {
+        colors.push('rgba(13, 162, 0, .5)');
+    }
+
     new Chart(ctx, {
-            type: 'horizontalBar',
-            data: {
-                labels: ["Humanities", "Social", "Health", "Technology", "Exact", "Natural", "Agriculture", "Arts"],
-                datasets: [{
-                    backgroundColor: [
-                        'rgba(13, 162, 0, .5)',
-                        'rgba(13, 162, 0, .5)',
-                        'rgba(13, 162, 0, .5)',
-                        'rgba(13, 162, 0, .5)',
-                        'rgba(13, 162, 0, .5)',
-                        'rgba(13, 162, 0, .5)',
-                        'rgba(13, 162, 0, .5)',
-                        'rgba(13, 162, 0, .5)'
-                    ],
-                    data: [1, 2, 3, 4, 5, 6, 7, 8]
-                }]
+        type: 'horizontalBar',
+        data: {
+            labels: labels,
+            datasets: [{
+                backgroundColor: colors,
+                data: data
+            }]
+        },
+        options: {
+            legend: {
+                display: false
             },
-            options: {
-                legend: {
-                    display: false
-                },
-                tooltips: {
-                    displayColors: false
-                }
+            tooltips: {
+                displayColors: false
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    ticks: {
+                        suggestedMin: 0,
+                        max: 1
+                    }
+                }]
             }
-        });
+        }
+    });
+}
 
     ctx = document.getElementById('chart-tsne');
     new Chart(ctx, {

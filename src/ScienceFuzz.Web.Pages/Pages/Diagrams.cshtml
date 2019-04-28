@@ -159,18 +159,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Dziedzina_1</td>
-                                <td>0.88</td>
-                            </tr>
-                            <tr>
-                                <td>Dziedzina_2</td>
-                                <td>0.67</td>
-                            </tr>
-                            <tr>
-                                <td>Dziedzina_3</td>
-                                <td>0.34</td>
-                            </tr>
+                            @foreach (var domain in Model.View.Domains)
+                            {
+                                <tr>
+                                    <td>@domain.Name</td>
+                                    <td>@domain.Result</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -224,13 +219,20 @@
     <script src="assets/js/diagrams.js"></script>
     <script>
         $(document).ready(function () {
-            var labels = '@Model.View.DisciplinesLabelsJson';
+            var disciplineLabels = '@Model.View.DisciplinesLabelsJson';
 
-            labels = $('<div/>').html(labels).text();
-            var labelArr = JSON.parse(labels);
+            disciplineLabels = $('<div/>').html(disciplineLabels).text();
+            var disciplineLabelArr = JSON.parse(disciplineLabels);
 
-            initRadarDisciplinesChart(labelArr, @Model.View.DisciplinesValuesJson);
-            initBarDisciplinesChart(labelArr, @Model.View.DisciplinesValuesJson);
+            initRadarDisciplinesChart(disciplineLabelArr, @Model.View.DisciplinesValuesJson);
+            initBarDisciplinesChart(disciplineLabelArr, @Model.View.DisciplinesValuesJson);
+
+            var domainLabels = '@Model.View.DomainsLabelsJson';
+            domainLabels = $('<div/>').html(domainLabels).text();
+            var domainLabelsArr = JSON.parse(domainLabels);
+
+            initRadarDomainsChart(domainLabelsArr, @Model.View.DomainsValuesJson);
+            initBarDomainsChart(domainLabelsArr, @Model.View.DomainsValuesJson);
           });
     </script>
 }

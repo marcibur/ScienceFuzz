@@ -18,7 +18,9 @@ namespace ScienceFuzz.Web.Pages.Pages
         {
             if (string.IsNullOrEmpty(Search))
             {
-                Journals = InMemoryData.Journals.ToList();
+                Journals = InMemoryData.Journals
+                    .OrderBy(x => x.Title)
+                        .ToList();
             }
             else
             {
@@ -27,7 +29,8 @@ namespace ScienceFuzz.Web.Pages.Pages
                     x.DisciplineA.Trim().ToLower().Contains(Search.Trim().ToLower()) ||
                     x.DisciplineB.Trim().ToLower().Contains(Search.Trim().ToLower()) ||
                     x.DisciplinesCString.Trim().ToLower().Contains(Search.Trim().ToLower()))
-                        .ToList();
+                        .OrderBy(x => x.Title)
+                            .ToList();
             }
         }
     }
