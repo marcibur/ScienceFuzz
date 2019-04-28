@@ -21,24 +21,34 @@ namespace ScienceFuzz.Web.Pages.Pages
         [BindProperty(SupportsGet = true)]
         public string Author { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; }
+
         public List<Publication> Publications { get; set; }
 
         public void OnGet()
         {
-            if (string.IsNullOrEmpty(Author))
+            Publications = InMemoryData.Publications.ToList();
+
+            if (!string.IsNullOrWhiteSpace(Author))
             {
-                Publications = InMemoryData.Publications
-                    .OrderBy(x => x.Author)
-                    .ThenBy(x => x.Title)
+                Publications = Publications.Where(x => x.Author == Author).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(Search))
+            {
+                Publications = Publications.Where(x =>
+                    x.Title.Trim().ToLower().Contains(Search.Trim().ToLower()) ||
+                    x.JournalFull.Trim().ToLower().Contains(Search.Trim().ToLower()) ||
+                    x.JournalShort.Trim().ToLower().Contains(Search.Trim().ToLower()) ||
+                    x.FormalType.Trim().ToLower().Contains(Search.Trim().ToLower()))
                         .ToList();
             }
-            else
-            {
-                Publications = InMemoryData.Publications
-                    .Where(x => x.Author == Author)
-                    .OrderBy(x => x.Title)
-                        .ToList();
-            }
+
+            Publications = Publications
+                .OrderBy(x => x.Author)
+                .ThenBy(x => x.Title)
+                    .ToList();
         }
     }
 }
