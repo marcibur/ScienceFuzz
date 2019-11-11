@@ -18,14 +18,34 @@ namespace ScienceFuzz.Console.Rtf
 
     public class Program
     {
+        private static IEnumerable<string> WhiteList { get; set; }
+        private static IEnumerable<Publication> Publications { get; set; }
+
+
+
         static async Task Main(string[] args)
         {
-            var publications = await ReadFromFileToMemoryAsync();
-            WriteToCsv(publications);
-            WriteToZip(publications);
+            await LoadWhiteListAsync();
+            await LoadPublicationsAsync();
+            WriteToCsv();
+            WriteToZip();
         }
 
-        private static async Task<IEnumerable<Publication>> ReadFromFileToMemoryAsync()
+
+
+        private static async Task LoadWhiteListAsync()
+        {
+            string text;
+
+            using (var streamReader = new StreamReader("whitelist.txt"))
+            {
+                text = await streamReader.ReadToEndAsync();
+            }
+
+            WhiteList = text.Replace("\r", "").Split("\n");
+        }
+
+        private static async Task LoadPublicationsAsync()
         {
             string text;
 
@@ -52,20 +72,23 @@ namespace ScienceFuzz.Console.Rtf
 
                 foreach (var author in authors)
                 {
-                    publications.Add(new Publication
+                    if (WhiteList.Any(x => author.Contains(x)))
                     {
-                        Author = author,
-                        Journal = journal
-                    });
+                        publications.Add(new Publication
+                        {
+                            Author = author,
+                            Journal = journal
+                        });
+                    }
                 }
             }
 
-            return publications;
+            Publications = publications;
         }
 
-        private static void WriteToCsv(IEnumerable<Publication> publications)
+        private static void WriteToCsv()
         {
-            var orderedPublications = publications.OrderBy(x => x.Author).ThenBy(x => x.Journal).ToArray();
+            var orderedPublications = Publications.OrderBy(x => x.Author).ThenBy(x => x.Journal).ToArray();
 
             using (var writer = new StreamWriter("output.csv", append: false, Encoding.UTF8))
             using (var csv = new CsvWriter(writer, new Configuration { Delimiter = "," }))
@@ -74,9 +97,9 @@ namespace ScienceFuzz.Console.Rtf
             }
         }
 
-        private static void WriteToZip(IEnumerable<Publication> publications)
+        private static void WriteToZip()
         {
-            var publicationsOrderedByJournals = publications.OrderBy(x => x.Journal).ToArray();
+            var publicationsOrderedByJournals = Publications.OrderBy(x => x.Journal).ToArray();
 
             var currentDirectory = Directory.GetCurrentDirectory();
             Directory.CreateDirectory($"{currentDirectory}/temp");
