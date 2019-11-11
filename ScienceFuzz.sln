@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Models", "lib\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Data.InMemory", "lib\ScienceFuzz.Data.InMemory\ScienceFuzz.Data.InMemory.csproj", "{30A19506-28C4-4156-9D0F-804B5BCE7F43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Console.Rtf", "src\ScienceFuzz.Console.Rtf\ScienceFuzz.Console.Rtf.csproj", "{19738413-91F8-4537-834B-67CA350A399E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Console.Data.Parsing", "src\ScienceFuzz.Console.Data.Parsing\ScienceFuzz.Console.Data.Parsing.csproj", "{19738413-91F8-4537-834B-67CA350A399E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

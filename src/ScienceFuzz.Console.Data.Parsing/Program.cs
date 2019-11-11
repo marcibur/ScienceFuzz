@@ -76,7 +76,7 @@ namespace ScienceFuzz.Console.Rtf
                     {
                         publications.Add(new Publication
                         {
-                            Author = author,
+                            Author = author.Split(' ')[0],
                             Journal = journal
                         });
                     }
