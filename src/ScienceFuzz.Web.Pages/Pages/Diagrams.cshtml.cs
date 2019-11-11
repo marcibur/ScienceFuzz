@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 using ScienceFuzz.Data.InMemory;
 using ScienceFuzz.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json;
 
 namespace ScienceFuzz.Web.Pages.Pages
 {
@@ -268,7 +268,7 @@ namespace ScienceFuzz.Web.Pages.Pages
         private string DisciplinesToLablesJson(List<DisciplineResult> disciplines)
         {
             var result = disciplines.Select(x => x.Name).ToArray();
-            var resultJson = JsonConvert.SerializeObject(result);
+            var resultJson = JsonSerializer.Serialize(result);
 
             return resultJson;
         }
@@ -276,7 +276,7 @@ namespace ScienceFuzz.Web.Pages.Pages
         private string DisciplinesToValuesJson(List<DisciplineResult> disciplines)
         {
             var result = disciplines.Select(x => x.Result).ToArray();
-            var resultJson = JsonConvert.SerializeObject(result);
+            var resultJson = JsonSerializer.Serialize(result);
             return resultJson;
         }
 
@@ -418,14 +418,14 @@ namespace ScienceFuzz.Web.Pages.Pages
         private string DomainsToLabelsJson(IEnumerable<DomainResult> domainResults)
         {
             var labels = domainResults.Select(x => x.Name).ToArray();
-            var result = JsonConvert.SerializeObject(labels);
+            var result = JsonSerializer.Serialize(labels);
             return result;
         }
 
         private string DomainsToValuesJson(IEnumerable<DomainResult> domainResults)
         {
             var values = domainResults.Select(x => x.Result).ToArray();
-            var result = JsonConvert.SerializeObject(values);
+            var result = JsonSerializer.Serialize(values);
             return result;
         }
     }

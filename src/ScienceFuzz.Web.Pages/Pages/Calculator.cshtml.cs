@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using ScienceFuzz.Web.Pages.Tools;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace ScienceFuzz.Web.Pages.Pages
 {
@@ -16,7 +16,7 @@ namespace ScienceFuzz.Web.Pages.Pages
         [BindProperty(SupportsGet = false), ValidFileExtensions("csv"), Required]
         public IFormFile CsvFile { get; set; }
         public IEnumerable<JournalViewModel> Journals { get; private set; } = new List<JournalViewModel>();
-        public string ResultsJSON { get; private set; } = JsonConvert.SerializeObject(new double[] { });
+        public string ResultsJSON { get; private set; } = JsonSerializer.Serialize(new double[] { });
 
         public void OnGet() { }
 
@@ -130,7 +130,7 @@ namespace ScienceFuzz.Web.Pages.Pages
 
         private void ScoresToJson()
         {
-            ResultsJSON = JsonConvert.SerializeObject(new double[]
+            ResultsJSON = JsonSerializer.Serialize(new double[]
             {
                 Scores["Humanities"],
                 Scores["Social"],
