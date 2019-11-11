@@ -1,15 +1,28 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+    <div class="container">
+        <a class="navbar-brand logo" href="index.html"><img class="logo-img" src="assets/img/sciencefuzz.png"></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav navbar-nav ml-auto">
+                <NavLink class="nav-link">
+                    <li class="nav-item item" role="presentation"><a class="nav-link" href="/"><i class="fas fa-home"></i>&nbsp;Home</a></li>
+                </NavLink>
+                <NavLink class="nav-link">
+                    <li class="nav-item item" role="presentation"><a class="nav-link" href="Calculator"><i class="fas fa-calculator"></i>&nbsp;Calculator</a></li>
+                </NavLink>
+                <NavLink class="nav-link">
+                    <li class="nav-item item" role="presentation"><a class="nav-link" href="Tsne"><i class="fas fa-project-diagram"></i>&nbsp;T-SNE</a></li>
+                </NavLink>
+            </ul>
+        </div>
     </div>
+</nav>
 
-    <div class="content px-4">
-        @Body
+@Body
+
+<footer class="page-footer pull-down">
+    <div class="footer-copyright">
+        <p>© 2019 Nicolaus Copernicus University</p>
     </div>
-</div>
+</footer>

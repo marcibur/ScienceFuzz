@@ -1,0 +1,39 @@
+article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+}
+
+.naukowiec-choose-main {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.naukowiec-choose-div {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.naukowiec-choose-form {
+  padding: 50px;
+  width: 50%;
+}
+
+.journals-div {
+  border: 1px solid lightgray;
+}
+
+.calculator-spa-section {
+  padding-top: 50px;
+}
+
+scientist-choose-heading {
+  color: black;
+}
+
+.scientist-choose-heading {
+  color: #3e8ce4;
+  font-weight: bold;
+}
+
+.view-section-title {
+  text-align: left;
+}
+
