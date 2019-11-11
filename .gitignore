@@ -12,6 +12,7 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+whitelist.txt
 
 # Build results
 [Dd]ebug/
@@ -338,6 +339,3 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
-# BeatPulse healthcheck temp database
-healthchecksdb
-/src/ScienceFuzz.Console.Rtf/whitelist.txt
