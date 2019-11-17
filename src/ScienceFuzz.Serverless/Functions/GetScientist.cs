@@ -19,7 +19,7 @@ namespace ScienceFuzz.Serverless.Functions
 
         [FunctionName(nameof(GetScientist))]
         public IActionResult Execute(
-            [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "{scientistName}")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, HTTP.GET, Route = "scientists/{scientistName}")] HttpRequest request,
             string scientistName)
         {
             var scientist = _appState.Scientists.FirstOrDefault(x => x.Name == scientistName);
@@ -28,7 +28,7 @@ namespace ScienceFuzz.Serverless.Functions
                 return new NotFoundResult();
             }
 
-            return new OkObjectResult(scientist.DisciplineContributions);
+            return new OkObjectResult(scientist);
         }
     }
 }

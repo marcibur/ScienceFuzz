@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using ScienceFuzz.Models;
 using ScienceFuzz.Serverless.Configuration;
 using ScienceFuzz.Serverless.State;
 using System.Collections.Generic;

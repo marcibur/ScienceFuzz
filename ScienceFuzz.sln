@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Console.Data.Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Web.Spa", "src\ScienceFuzz.Web.Spa\ScienceFuzz.Web.Spa.csproj", "{7E6D53AD-7368-4F9F-88E9-1E7466933E6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Serverless", "src\ScienceFuzz.Serverless\ScienceFuzz.Serverless.csproj", "{12B404B7-8B2F-4CB3-9FAD-C7A96FEE2864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless", "src\ScienceFuzz.Serverless\ScienceFuzz.Serverless.csproj", "{12B404B7-8B2F-4CB3-9FAD-C7A96FEE2864}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

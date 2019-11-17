@@ -1,4 +1,6 @@
 ﻿@page "/Calculator"
+@using ScienceFuzz.Models
+@inject HttpClient http
 @inject IJSRuntime JSRuntime;
 
 <main class="naukowiec-choose-main">
@@ -8,7 +10,26 @@
             <div class="col col-12 col-md-6">
                 <form>
                     <h4 class="scientist-choose-heading">Wybierz naukowca</h4>
-                    <div class="form-group"><select class="form-control"><option value="12" selected="">Naukowiec_1</option><option value="13">Naukowiec_2</option><option value="14">Naukowiec_3</option></select></div>
+                    <div class="form-group">
+                        <EditForm Model="@scientist" OnValidSubmit="@HandleValidSubmit">
+                            @if (scientistNames == null)
+                            {
+                                <p><em>Loading...</em></p>
+                            }
+                            else
+                            {
+                                <InputSelect class="form-control" @bind-Value="scientist.Name">
+                                    @foreach (var scientistName in scientistNames)
+                                        {
+                                        <option value=@scientistName>@scientistName</option>
+                                        }
+                                    /**/
+                                    /**/
+                                    /**/
+                                </InputSelect>
+                            }
+                        </EditForm>
+                    </div>
                 </form>
             </div>
             <div class="col"></div>
@@ -52,8 +73,19 @@
 
 @code
 {
-    protected override void OnAfterRender(bool firstRender)
+    private Scientist scientist = new Scientist();
+    private string[] scientistNames;
+
+    protected override async Task OnInitializedAsync()
     {
-        JSRuntime.InvokeVoidAsync("initCharts");
+        //scientistNames = new string[] { "dupa" };
+        scientistNames = await http.GetJsonAsync<string[]>("http://localhost:7071/api/scientists");
+        Console.WriteLine(scientistNames);
+        //this.StateHasChanged();
+    }
+
+    private void HandleValidSubmit()
+    {
+
     }
 }

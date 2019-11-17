@@ -1,6 +1,21 @@
+function setDisciplinesChart(data) {
+    var ctx = document.getElementById('chart-disciplines-bars');
+    new Chart(ctx, {
+        type: 'horizontalBar',
+        data: data,
+        options: {
+            legend: {
+                display: false
+            },
+            tooltips: {
+                displayColors: false
+            }
+        }
+    });
+}
+
 function initCharts() {
     var ctx = document.getElementById('chart-disciplines-bars');
-    console.log(ctx);
     new Chart(ctx, {
         type: 'horizontalBar',
         data: {
