@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using ScienceFuzz.Web.Spa.Configuration;
 using System.Net.Http;
 
 namespace ScienceFuzz.Web.Spa
@@ -8,6 +9,7 @@ namespace ScienceFuzz.Web.Spa
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<Settings>();
             services.AddTransient<HttpClient>();
         }
 

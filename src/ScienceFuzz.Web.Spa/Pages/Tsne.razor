@@ -1,8 +1,9 @@
 ﻿@page "/TSNE"
 @using ScienceFuzz.Models
-@using System.Text.Json
-@inject HttpClient http
-@inject IJSRuntime JSRuntime;
+@using ScienceFuzz.Web.Spa.Configuration
+@inject Settings _settings
+@inject HttpClient _http
+@inject IJSRuntime _js
 
 <main class="tsne-main">
     <section>
@@ -20,7 +21,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        models = await http.GetJsonAsync<List<TsneModel>>("http://localhost:7071/api/scientists/contributions/domains");
-        await JSRuntime.InvokeVoidAsync("setTsne", models);
+        models = await _http.GetJsonAsync<List<TsneModel>>($"{_settings.ApiRootUrl}scientists/contributions/domains");
+        await _js.InvokeVoidAsync("setTsne", models);
     }
 }

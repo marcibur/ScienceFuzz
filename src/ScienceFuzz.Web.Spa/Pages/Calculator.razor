@@ -1,8 +1,9 @@
 ﻿@page "/Calculator"
 @using ScienceFuzz.Models
-@using System.Text.Json
-@inject HttpClient http
-@inject IJSRuntime JSRuntime;
+@using ScienceFuzz.Web.Spa.Configuration
+@inject Settings _settings
+@inject HttpClient _http
+@inject IJSRuntime _js
 
 <main class="naukowiec-choose-main">
     <section class="calculator-spa-section">
@@ -81,7 +82,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        scientistNames = await http.GetJsonAsync<string[]>("http://localhost:7071/api/scientists");
+        scientistNames = await _http.GetJsonAsync<string[]>($"{_settings.ApiRootUrl}scientists");
         await SetScientistAsync(scientistNames[0]);
     }
 
@@ -94,7 +95,7 @@
 
     private async Task SetScientistAsync(string scientistName)
     {
-        scientist = await http.GetJsonAsync<Scientist>($"http://localhost:7071/api/scientists/{scientistName}");
+        scientist = await _http.GetJsonAsync<Scientist>($"{_settings.ApiRootUrl}scientists/{scientistName}");
 
         var barChartViewModel = new ChartViewModel
         {
@@ -105,10 +106,10 @@
                 {
                     Data = scientist.DisciplineContributions.Select(x => x.Value).ToArray()
                 }
-                }
+                                }
         };
 
-        await JSRuntime.InvokeVoidAsync("setDisciplinesChart", barChartViewModel);
+        await _js.InvokeVoidAsync("setDisciplinesChart", barChartViewModel);
 
         var radarChartViewModel = new ChartViewModel
         {
@@ -119,10 +120,10 @@
                 {
                     Data = scientist.DomainContributions.Select(x => x.Value).ToArray()
                 }
-                }
+                                }
         };
 
-        await JSRuntime.InvokeVoidAsync("setDomainsChart", radarChartViewModel);
+        await _js.InvokeVoidAsync("setDomainsChart", radarChartViewModel);
     }
 
 
