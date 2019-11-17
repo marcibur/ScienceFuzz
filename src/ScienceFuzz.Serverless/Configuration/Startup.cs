@@ -16,11 +16,39 @@ namespace ScienceFuzz.Serverless.Configuration
         {
             var appState = new AppState();
             IEnumerable<PublicationInitModel> publicationsInit;
+            IEnumerable<DisciplineInitModel> disciplinesInit;
+            IEnumerable<DomainInitModel> domainsInit;
+            IEnumerable<JournalInitModel> journalsInit;
+            IEnumerable<JournalDisciplineRealtionsInitModel> journalDisciplineRelationsInit;
 
             using (var reader = new StreamReader(@"Data\publications.csv"))
             using (var csv = new CsvReader(reader))
             {
                 publicationsInit = csv.GetRecords<PublicationInitModel>().ToList();
+            }
+
+            using (var reader = new StreamReader(@"Data\disciplines.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+                disciplinesInit = csv.GetRecords<DisciplineInitModel>().ToList();
+            }
+
+            using (var reader = new StreamReader(@"Data\domains.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+                domainsInit = csv.GetRecords<DomainInitModel>().ToList();
+            }
+
+            using (var reader = new StreamReader(@"Data\journals.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+                journalsInit = csv.GetRecords<JournalInitModel>().ToList();
+            }
+
+            using (var reader = new StreamReader(@"Data\journal_discipline_relations.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+                journalDisciplineRelationsInit = csv.GetRecords<JournalDisciplineRealtionsInitModel>().ToList();
             }
 
             var scientists = new List<Scientist>();
@@ -56,6 +84,8 @@ namespace ScienceFuzz.Serverless.Configuration
             }
 
             appState.Scientists = scientists;
+            // --------------------------------------------------------
+
 
             builder.Services.AddSingleton(appState);
         }
