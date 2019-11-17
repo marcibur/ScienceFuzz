@@ -50,14 +50,14 @@ namespace ScienceFuzz.Serverless.Configuration
             var appState = new AppState();
 
             // Load domains
-            using (var streamReader = new StreamReader(@"Data\domains.txt"))
+            using (var streamReader = new StreamReader(@"D:\home\site\wwwroot\Data\domains.txt"))
             {
                 var text = streamReader.ReadToEnd();
                 appState.Domains = text.Replace("\r", "").Split("\n");
             }
 
-            // Load disciplines
-            using (var streamReader = new StreamReader(@"Data\disciplines.txt"))
+            //Load disciplines
+            using (var streamReader = new StreamReader(@"D:\home\site\wwwroot\Data\disciplines.txt"))
             {
                 var text = streamReader.ReadToEnd();
                 appState.Disciplines = text.Replace("\r", "").Split("\n");
@@ -68,7 +68,7 @@ namespace ScienceFuzz.Serverless.Configuration
             // Load scientists + publications
             IEnumerable<PublicationInitModel> publications;
             List<Scientist> scientists = new List<Scientist>();
-            using (var streamReader = new StreamReader(@"Data\author_journal.csv"))
+            using (var streamReader = new StreamReader(@"D:\home\site\wwwroot\Data\author_journal.csv"))
             using (var csv = new CsvReader(streamReader))
             {
                 publications = csv.GetRecords<PublicationInitModel>().ToList();
@@ -112,7 +112,7 @@ namespace ScienceFuzz.Serverless.Configuration
 
             // Load journal - discipline relation
             IEnumerable<JournalDisciplineInitModel> journalDiscipline;
-            using (var streamReader = new StreamReader(@"Data\journal_discipline.csv"))
+            using (var streamReader = new StreamReader(@"D:\home\site\wwwroot\Data\journal_discipline.csv"))
             using (var csv = new CsvReader(streamReader))
             {
                 journalDiscipline = csv.GetRecords<JournalDisciplineInitModel>().ToList();
@@ -157,7 +157,7 @@ namespace ScienceFuzz.Serverless.Configuration
 
             // Load journal - domain relation
             IEnumerable<JournalDomainInitModel> journalDomain;
-            using (var streamReader = new StreamReader(@"Data\journal_domain.csv"))
+            using (var streamReader = new StreamReader(@"D:\home\site\wwwroot\Data\journal_domain.csv"))
             using (var csv = new CsvReader(streamReader))
             {
                 journalDomain = csv.GetRecords<JournalDomainInitModel>().ToList();

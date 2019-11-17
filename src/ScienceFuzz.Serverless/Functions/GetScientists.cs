@@ -25,4 +25,14 @@ namespace ScienceFuzz.Serverless.Functions
             return new OkObjectResult(scientistsNames);
         }
     }
+
+    //public static class Func
+    //{
+    //    [FunctionName("Temp")]
+    //    public static string Execute(
+    //            [HttpTrigger(AuthorizationLevel.Anonymous, HTTP.GET, Route = "scientists")] HttpRequest request)
+    //    {
+    //        return "OK"
+    //    }
+    //}
 }
