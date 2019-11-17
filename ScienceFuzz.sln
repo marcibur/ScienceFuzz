@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Web.Spa", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless", "src\ScienceFuzz.Serverless\ScienceFuzz.Serverless.csproj", "{12B404B7-8B2F-4CB3-9FAD-C7A96FEE2864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Web.Spa.Server", "src\ScienceFuzz.Web.Spa.Server\ScienceFuzz.Web.Spa.Server.csproj", "{DE49E85A-3BC7-41B0-8B9D-9310835EBE48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{12B404B7-8B2F-4CB3-9FAD-C7A96FEE2864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12B404B7-8B2F-4CB3-9FAD-C7A96FEE2864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12B404B7-8B2F-4CB3-9FAD-C7A96FEE2864}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE49E85A-3BC7-41B0-8B9D-9310835EBE48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE49E85A-3BC7-41B0-8B9D-9310835EBE48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE49E85A-3BC7-41B0-8B9D-9310835EBE48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE49E85A-3BC7-41B0-8B9D-9310835EBE48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{19738413-91F8-4537-834B-67CA350A399E} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 		{7E6D53AD-7368-4F9F-88E9-1E7466933E6D} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 		{12B404B7-8B2F-4CB3-9FAD-C7A96FEE2864} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
+		{DE49E85A-3BC7-41B0-8B9D-9310835EBE48} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36FB526F-A843-426D-ACCC-9248CBA4CD62}
