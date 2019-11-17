@@ -11,24 +11,20 @@
                 <form>
                     <h4 class="scientist-choose-heading">Wybierz naukowca</h4>
                     <div class="form-group">
-                        <EditForm Model="@scientist" OnValidSubmit="@HandleValidSubmit">
-                            @if (scientistNames == null)
-                            {
-                                <p><em>Loading...</em></p>
-                            }
-                            else
-                            {
-                                <InputSelect class="form-control" @bind-Value="scientist.Name">
-                                    @foreach (var scientistName in scientistNames)
-                                        {
-                                        <option value=@scientistName>@scientistName</option>
-                                        }
-                                    /**/
-                                    /**/
-                                    /**/
-                                </InputSelect>
-                            }
-                        </EditForm>
+                        @if (scientistNames == null)
+                        {
+                            <p><em>Loading...</em></p>
+                        }
+                        else
+                        {
+                            <select class="form-control" @onchange="OnScientistSelected">
+                                @foreach (var scientistName in scientistNames)
+                                {
+                                    <option value=@scientistName>@scientistName</option>
+                                }
+
+                            </select>
+                        }
                     </div>
                 </form>
             </div>
@@ -46,14 +42,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Czasopismo_1</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>Czasopismo_2</td>
-                            <td>1</td>
-                        </tr>
+                        @if (scientist == null)
+                        {
+                            <p><em>Loading...</em></p>
+                        }
+                        else
+                        {
+                            @foreach (var publication in scientist.Publications)
+                            {
+                                <tr>
+                                    <td>@publication.Journal</td>
+                                    <td>@publication.Count</td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -73,19 +75,18 @@
 
 @code
 {
-    private Scientist scientist = new Scientist();
+    private Scientist scientist;
     private string[] scientistNames;
 
     protected override async Task OnInitializedAsync()
     {
-        //scientistNames = new string[] { "dupa" };
         scientistNames = await http.GetJsonAsync<string[]>("http://localhost:7071/api/scientists");
-        Console.WriteLine(scientistNames);
-        //this.StateHasChanged();
+        scientist = await http.GetJsonAsync<Scientist>($"http://localhost:7071/api/scientists/{scientistNames[0]}");
     }
 
-    private void HandleValidSubmit()
+    private async Task OnScientistSelected(ChangeEventArgs e)
     {
-
+        scientist = await http.GetJsonAsync<Scientist>($"http://localhost:7071/api/scientists/{e.Value}");
+        this.StateHasChanged();
     }
 }
