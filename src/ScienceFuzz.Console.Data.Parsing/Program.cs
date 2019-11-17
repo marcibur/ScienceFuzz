@@ -14,6 +14,7 @@ namespace ScienceFuzz.Console.Rtf
     {
         public string Author { get; set; }
         public string Journal { get; set; }
+        public int Count { get; set; }
     }
 
     public class Program
@@ -74,11 +75,20 @@ namespace ScienceFuzz.Console.Rtf
                 {
                     if (WhiteList.Any(x => author.Contains(x)))
                     {
-                        publications.Add(new Publication
+                        var publication = publications.FirstOrDefault(x => x.Author == author.Split(' ')[0] && x.Journal == journal);
+                        if (publication != null)
                         {
-                            Author = author.Split(' ')[0],
-                            Journal = journal
-                        });
+                            publication.Count++;
+                        }
+                        else
+                        {
+                            publications.Add(new Publication
+                            {
+                                Author = author.Split(' ')[0],
+                                Journal = journal,
+                                Count = 1
+                            });
+                        }
                     }
                 }
             }
@@ -106,7 +116,7 @@ namespace ScienceFuzz.Console.Rtf
 
             foreach (var publication in publicationsOrderedByJournals)
             {
-                File.AppendAllLines($"{currentDirectory}/temp/{publication.Author}.txt", new string[] { publication.Journal }, Encoding.UTF8);
+                File.AppendAllLines($"{currentDirectory}/temp/{publication.Author}.txt", new string[] { $"{publication.Journal};{publication.Count}" }, Encoding.UTF8);
             }
 
             File.Delete($"{currentDirectory}/output.zip");

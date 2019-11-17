@@ -10,84 +10,136 @@ using System.Linq;
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace ScienceFuzz.Serverless.Configuration
 {
+    public class PublicationInitModel
+    {
+        public string Author { get; set; }
+        public string Journal { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class JournalDisciplineInitModel
+    {
+        public string Title1 { get; set; }
+        public string Title2 { get; set; }
+        public string DisciplinesString { get; set; }
+        public string[] Disciplines => DisciplinesString.Split(';');
+    }
+
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var appState = new AppState();
-            IEnumerable<PublicationInitModel> publicationsInit;
-            IEnumerable<DisciplineInitModel> disciplinesInit;
-            IEnumerable<DomainInitModel> domainsInit;
-            IEnumerable<JournalInitModel> journalsInit;
-            IEnumerable<JournalDisciplineRealtionsInitModel> journalDisciplineRelationsInit;
 
-            using (var reader = new StreamReader(@"Data\publications.csv"))
-            using (var csv = new CsvReader(reader))
+            // Load domains
+            using (var streamReader = new StreamReader(@"Data\domains.txt"))
             {
-                publicationsInit = csv.GetRecords<PublicationInitModel>().ToList();
+                var text = streamReader.ReadToEnd();
+                appState.Domains = text.Replace("\r", "").Split("\n");
             }
 
-            using (var reader = new StreamReader(@"Data\disciplines.csv"))
-            using (var csv = new CsvReader(reader))
+            // Load disciplines
+            using (var streamReader = new StreamReader(@"Data\disciplines.txt"))
             {
-                disciplinesInit = csv.GetRecords<DisciplineInitModel>().ToList();
+                var text = streamReader.ReadToEnd();
+                appState.Disciplines = text.Replace("\r", "").Split("\n");
             }
 
-            using (var reader = new StreamReader(@"Data\domains.csv"))
-            using (var csv = new CsvReader(reader))
+
+
+            // Load scientists + publications
+            IEnumerable<PublicationInitModel> publications;
+            List<Scientist> scientists = new List<Scientist>();
+            using (var streamReader = new StreamReader(@"Data\author_journal.csv"))
+            using (var csv = new CsvReader(streamReader))
             {
-                domainsInit = csv.GetRecords<DomainInitModel>().ToList();
+                publications = csv.GetRecords<PublicationInitModel>().ToList();
             }
 
-            using (var reader = new StreamReader(@"Data\journals.csv"))
-            using (var csv = new CsvReader(reader))
+            foreach (var publication in publications)
             {
-                journalsInit = csv.GetRecords<JournalInitModel>().ToList();
-            }
-
-            using (var reader = new StreamReader(@"Data\journal_discipline_relations.csv"))
-            using (var csv = new CsvReader(reader))
-            {
-                journalDisciplineRelationsInit = csv.GetRecords<JournalDisciplineRealtionsInitModel>().ToList();
-            }
-
-            var scientists = new List<Scientist>();
-            var journals = new List<Journal>();
-            var publications = new List<Publication>();
-            foreach (var publicationInit in publicationsInit)
-            {
-                var scientist = scientists.FirstOrDefault(x => x.Name == publicationInit.Author);
+                var scientist = scientists.FirstOrDefault(x => x.Name == publication.Author);
                 if (scientist == null)
                 {
-                    scientist = new Scientist { Name = publicationInit.Author };
+                    scientist = new Scientist
+                    {
+                        Name = publication.Author
+                    };
+
                     scientists.Add(scientist);
                 }
 
-                var journal = journals.FirstOrDefault(x => x.Title == publicationInit.Journal);
-                if (journal == null)
+                scientist.Publications.Add(new Publication
                 {
-                    journal = new Journal { Title = publicationInit.Journal };
-                    journals.Add(journal);
-                }
-
-                var publication = publications.FirstOrDefault(x => x.Scientist == scientist && x.Journal == journal);
-                if (publication == null)
-                {
-                    publication = new Publication { Scientist = scientist, Journal = journal, Count = 1 };
-                    scientist.Publications.Add(publication);
-                    publications.Add(publication);
-                }
-                else
-                {
-                    publication.Count++;
-                }
+                    Journal = publication.Journal,
+                    Count = publication.Count
+                });
             }
 
             appState.Scientists = scientists;
-            // --------------------------------------------------------
 
+
+            // Add starting discipline contributions at 0 value for each scientist
+            foreach (var scientist in scientists)
+            {
+                foreach (var discipline in appState.Disciplines)
+                {
+                    scientist.DisciplineContributions.Add(new Contribution
+                    {
+                        Name = discipline,
+                        Value = 0
+                    });
+                }
+            }
+
+            // Load journal - discipline relation
+            IEnumerable<JournalDisciplineInitModel> journalDiscipline;
+            using (var streamReader = new StreamReader(@"Data\journal_discipline.csv"))
+            using (var csv = new CsvReader(streamReader))
+            {
+                journalDiscipline = csv.GetRecords<JournalDisciplineInitModel>().ToList();
+            }
+
+            // Calculate discipline contributions for each scientist
+            const double A = 0.01;
+            foreach (var scientist in scientists)
+            {
+                foreach (var publication in scientist.Publications)
+                {
+                    var relation = journalDiscipline.FirstOrDefault(x => x.Title1 == publication.Journal || x.Title2 == publication.Journal);
+                    if (relation != null)
+                    {
+                        foreach (var discipline in relation.Disciplines)
+                        {
+                            var contribution = scientist.DisciplineContributions.First(x => x.Name == discipline);
+                            for (int i = 0; i < publication.Count; i++)
+                            {
+                                contribution.Value = S(contribution.Value, 1 * A);
+                            }
+                        }
+                    }
+                }
+            }
 
             builder.Services.AddSingleton(appState);
+        }
+
+        //private double Calculate(List<double> scores)
+        //{
+        //    const double A = 0.01;
+        //    double result = 0;
+
+        //    foreach (var score in scores)
+        //    {
+        //        result = S(result, score * A);
+        //    }
+
+        //    return result;
+        //}
+
+        private double S(double x, double y)
+        {
+            return x + y - x * y;
         }
     }
 }

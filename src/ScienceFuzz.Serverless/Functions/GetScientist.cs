@@ -4,7 +4,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using ScienceFuzz.Serverless.Constants;
 using ScienceFuzz.Serverless.State;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ScienceFuzz.Serverless.Functions
@@ -24,18 +23,12 @@ namespace ScienceFuzz.Serverless.Functions
             string scientistName)
         {
             var scientist = _appState.Scientists.FirstOrDefault(x => x.Name == scientistName);
-
-            var response = new List<object>();
-            foreach (var publication in scientist.Publications)
+            if (scientist == null)
             {
-                response.Add(new
-                {
-                    Title = publication.Journal.Title,
-                    Count = publication.Count
-                });
+                return new NotFoundResult();
             }
 
-            return new OkObjectResult(response);
+            return new OkObjectResult(scientist.DisciplineContributions);
         }
     }
 }
