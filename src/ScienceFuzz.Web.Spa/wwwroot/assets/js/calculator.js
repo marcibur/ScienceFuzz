@@ -1,6 +1,10 @@
 function setDisciplinesChart(data) {
+    if (window.disciplineChart != null) {
+        window.disciplineChart.destroy();
+    }
+
     var ctx = document.getElementById('chart-disciplines-bars');
-    new Chart(ctx, {
+    window.disciplineChart = new Chart(ctx, {
         type: 'horizontalBar',
         data: data,
         options: {
@@ -13,6 +17,44 @@ function setDisciplinesChart(data) {
         }
     });
 }
+
+function setDomainsChart(data) {
+    if (window.domainChart != null) {
+        window.domainChart.destroy();
+    }
+    console.log(data.labels);
+    console.log(data.datasets[0].data);
+    ctx = document.getElementById('chart-domains-radar');
+    window.domainChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                backgroundColor: [
+                    'rgba(13, 162, 0, .5)',
+                    'rgba(13, 162, 0, .5)',
+                    'rgba(13, 162, 0, .5)',
+                    'rgba(13, 162, 0, .5)',
+                    'rgba(13, 162, 0, .5)',
+                    'rgba(13, 162, 0, .5)',
+                    'rgba(13, 162, 0, .5)',
+                    'rgba(13, 162, 0, .5)'
+                ],
+                data: data.datasets[0].data
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            tooltips: {
+                displayColors: false
+            }
+        }
+    });
+}
+
+
 
 function initCharts() {
     var ctx = document.getElementById('chart-disciplines-bars');

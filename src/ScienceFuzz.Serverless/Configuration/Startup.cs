@@ -26,6 +26,23 @@ namespace ScienceFuzz.Serverless.Configuration
         public string[] Disciplines => DisciplinesString.Split(';');
     }
 
+    public class JournalDomainInitModel
+    {
+        public string Title1 { get; set; }
+        public string Title2 { get; set; }
+
+        public int Humanities { get; set; }
+        public int Tech { get; set; }
+        public int Medical { get; set; }
+        public int Farm { get; set; }
+        public int Social { get; set; }
+        public int Science { get; set; }
+        public int Religion { get; set; }
+        public int Arts { get; set; }
+    }
+
+
+
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
@@ -122,21 +139,90 @@ namespace ScienceFuzz.Serverless.Configuration
                 }
             }
 
+
+
+            // Calculate domains
+            // Add starting domain contributions at 0 value for each scientist
+            foreach (var scientist in scientists)
+            {
+                foreach (var domain in appState.Domains)
+                {
+                    scientist.DomainContributions.Add(new Contribution
+                    {
+                        Name = domain,
+                        Value = 0
+                    });
+                }
+            }
+
+            // Load journal - domain relation
+            IEnumerable<JournalDomainInitModel> journalDomain;
+            using (var streamReader = new StreamReader(@"Data\journal_domain.csv"))
+            using (var csv = new CsvReader(streamReader))
+            {
+                journalDomain = csv.GetRecords<JournalDomainInitModel>().ToList();
+            }
+
+            foreach (var scientist in scientists)
+            {
+                foreach (var publication in scientist.Publications)
+                {
+                    var relation = journalDomain.FirstOrDefault(x => x.Title1 == publication.Journal || x.Title2 == publication.Journal);
+                    if (relation != null)
+                    {
+                        var contribution = scientist.DomainContributions[0];
+                        for (int i = 0; i < relation.Humanities; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+
+                        contribution = scientist.DomainContributions[1];
+                        for (int i = 0; i < relation.Tech; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+
+                        contribution = scientist.DomainContributions[2];
+                        for (int i = 0; i < relation.Medical; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+
+                        contribution = scientist.DomainContributions[3];
+                        for (int i = 0; i < relation.Farm; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+
+                        contribution = scientist.DomainContributions[4];
+                        for (int i = 0; i < relation.Social; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+
+                        contribution = scientist.DomainContributions[5];
+                        for (int i = 0; i < relation.Science; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+
+                        contribution = scientist.DomainContributions[6];
+                        for (int i = 0; i < relation.Religion; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+
+                        contribution = scientist.DomainContributions[7];
+                        for (int i = 0; i < relation.Arts; i++)
+                        {
+                            contribution.Value = S(contribution.Value, 1 * A);
+                        }
+                    }
+                }
+            }
+
             builder.Services.AddSingleton(appState);
         }
-
-        //private double Calculate(List<double> scores)
-        //{
-        //    const double A = 0.01;
-        //    double result = 0;
-
-        //    foreach (var score in scores)
-        //    {
-        //        result = S(result, score * A);
-        //    }
-
-        //    return result;
-        //}
 
         private double S(double x, double y)
         {
