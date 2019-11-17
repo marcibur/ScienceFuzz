@@ -1,0 +1,26 @@
+﻿@page "/TSNE"
+@using ScienceFuzz.Models
+@using System.Text.Json
+@inject HttpClient http
+@inject IJSRuntime JSRuntime;
+
+<main class="tsne-main">
+    <section>
+        <div class="row">
+            <div class="col col-12 col-lg-12">
+                <div><canvas id="chart-tsne"></canvas></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@code
+{
+    private List<TsneModel> models;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        models = await http.GetJsonAsync<List<TsneModel>>("http://localhost:7071/api/scientists/contributions/domains");
+        await JSRuntime.InvokeVoidAsync("setTsne", models);
+    }
+}
