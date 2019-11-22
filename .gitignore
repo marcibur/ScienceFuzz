@@ -340,3 +340,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
+/src/ScienceFuzz.Initialization.Console/Configuration/configuration.json
+/src/ScienceFuzz.Initialization.Console/Config/configuration.json
