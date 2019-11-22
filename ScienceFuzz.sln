@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz", "lib\ScienceF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Initialization.Console", "src\ScienceFuzz.Initialization.Console\ScienceFuzz.Initialization.Console.csproj", "{1D22DB8D-F27E-4B7D-86A2-F2CF8059BB5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Data", "lib\ScienceFuzz.Data\ScienceFuzz.Data.csproj", "{5A83E093-1A6E-448D-9689-AFD96B510412}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{1D22DB8D-F27E-4B7D-86A2-F2CF8059BB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D22DB8D-F27E-4B7D-86A2-F2CF8059BB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D22DB8D-F27E-4B7D-86A2-F2CF8059BB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A83E093-1A6E-448D-9689-AFD96B510412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A83E093-1A6E-448D-9689-AFD96B510412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A83E093-1A6E-448D-9689-AFD96B510412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A83E093-1A6E-448D-9689-AFD96B510412}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{DE49E85A-3BC7-41B0-8B9D-9310835EBE48} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 		{431534C7-F187-45EA-BA89-29F17B54B731} = {413692D0-D59F-40C9-BEE3-F31104B642B1}
 		{1D22DB8D-F27E-4B7D-86A2-F2CF8059BB5A} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
+		{5A83E093-1A6E-448D-9689-AFD96B510412} = {413692D0-D59F-40C9-BEE3-F31104B642B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36FB526F-A843-426D-ACCC-9248CBA4CD62}

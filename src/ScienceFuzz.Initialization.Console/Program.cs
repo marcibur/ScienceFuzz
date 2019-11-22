@@ -1,8 +1,13 @@
 ﻿
+using CsvHelper;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.Storage.Blob;
+using ScienceFuzz.Data;
 using ScienceFuzz.Initialization.Console.Config;
+using ScienceFuzz.Initialization.Console.Models;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -17,6 +22,7 @@ namespace ScienceFuzz.Initialization.Console
             await LoadConfigurationAsync();
             await DropCreateStorageAsync();
             await DropCreateCacheAsync();
+            await SeedDataAsync();
         }
 
         static async Task LoadConfigurationAsync()
@@ -52,7 +58,32 @@ namespace ScienceFuzz.Initialization.Console
 
         static async Task SeedDataAsync()
         {
+            var tableClient = CloudStorageAccount.Parse(_config.StorageConnection).CreateCloudTableClient();
+            var scientistsTable = tableClient.GetTableReference(Constants.StorageTableNames.Scientists);
 
+            List<ScientistCsvModel> scientistCsvModels;
+            using (var reader = new StreamReader(@"Data\scientists.csv"))
+            using (var csv = new CsvReader(reader))
+            {
+                scientistCsvModels = csv.GetRecords<ScientistCsvModel>().ToList();
+            }
+
+            var scientistGroups = scientistCsvModels.Select(x => new Scientist
+            {
+                PartitionKey = x.Unit,
+                RowKey = x.Name
+            }).GroupBy(x => x.PartitionKey);
+
+            var batches = new List<TableBatchOperation>();
+            foreach (var group in scientistGroups)
+            {
+                var batch = new TableBatchOperation();
+                foreach (var scientist in group)
+                {
+                    batch.Add(TableOperation.Insert(scientist));
+                }
+                await scientistsTable.ExecuteBatchAsync(batch);
+            }
         }
 
         static async Task RecreateTableAsync(CloudTableClient tableClient, string tableName)
