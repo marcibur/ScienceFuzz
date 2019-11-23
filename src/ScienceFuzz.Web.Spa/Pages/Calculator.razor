@@ -1,8 +1,6 @@
 ﻿@page "/Calculator"
-@using ScienceFuzz.Models
-@using ScienceFuzz.Web.Spa.Configuration
 @inject Settings _settings
-@inject HttpClient _http
+@inject ScienceFuzzClient _httpClient
 @inject IJSRuntime _js
 
 <main class="naukowiec-choose-main">
@@ -81,6 +79,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        scientistNames = await _http.GetJsonAsync<string[]>($"{_settings.ApiRootUri}/Scientists/Names");
+        scientistNames = await _httpClient.GetScientistNamesAsync();
     }
 }

@@ -8,7 +8,7 @@ using ScienceFuzz.Models.Shared;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ScienceFuzz.Serverless.Scientists
+namespace ScienceFuzz.Serverless.Scientists.Functions
 {
     // TODO: Refactor
     public static class GetPublications

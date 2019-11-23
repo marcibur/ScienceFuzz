@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ScienceFuzz.Serverless.Scientists
+namespace ScienceFuzz.Serverless.Scientists.Functions
 {
     public static class GetScientistNames
     {
