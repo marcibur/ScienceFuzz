@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using Microsoft.Azure.Storage.Blob;
+﻿using Microsoft.WindowsAzure.Storage;
 using ScienceFuzz.Initialization.Console.Config;
 using ScienceFuzz.Initialization.Console.Extensions;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.DISCIPLINE_CONTRIBUTIONS);
             await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS);
 
-            var blobClient = Microsoft.Azure.Storage.CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
+            var blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
             await blobClient.RecreateContainerAsync(CONST.STORAGE_CONTAINER_NAMES.DISCIPLINES);
         }
     }

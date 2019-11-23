@@ -6,6 +6,7 @@
     <ScientistChoice Scientists="Scientists" OnScientistSelected="OnScientistSet" />
     <PublicationsTable Publications="Publications" />
     <Disciplines Chart="DisciplinesChart" />
+    <Domains Chart="DomainsChart" />
 </main>
 
 @code
@@ -13,21 +14,25 @@
     public string[] Scientists { get; set; }
     public IEnumerable<PublicationModel> Publications { get; set; }
     public DisciplinesChart DisciplinesChart { get; set; }
+    public DomainsChart DomainsChart { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Scientists = await _httpClient.GetScientistNamesAsync();
+        Scientists = await _httpClient.GetScientistNames();
         await LoadPublications(Scientists[0]);
         await LoadDisciplinesChart(Scientists[0]);
+        await LoadDomainsChart(Scientists[0]);
     }
 
     public async Task OnScientistSet(ChangeEventArgs e)
     {
         Publications = null;
         DisciplinesChart = null;
+        DomainsChart = null;
         var scientist = e.Value.ToString();
         await LoadPublications(scientist);
         await LoadDisciplinesChart(scientist);
+        await LoadDomainsChart(scientist);
     }
 
     public async Task LoadPublications(string scientist) =>
@@ -36,6 +41,12 @@
     public async Task LoadDisciplinesChart(string scientist)
     {
         DisciplinesChart = new DisciplinesChart(await _httpClient.GetDisciplineContributions(scientist));
-        await _js.InvokeVoidAsync("loadDisciplinesChart", DisciplinesChart);
+        await _js.InvokeVoidAsync("loadContributionChart", "chart-disciplines", DisciplinesChart);
+    }
+
+    public async Task LoadDomainsChart(string scientist)
+    {
+        DomainsChart = new DomainsChart(await _httpClient.GetDomainContributions(scientist));
+        await _js.InvokeVoidAsync("loadContributionChart", "chart-domains", DomainsChart);
     }
 }

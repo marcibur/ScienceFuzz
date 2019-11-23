@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Storage.Blob;
+﻿using Microsoft.WindowsAzure.Storage.Blob;
 using System.Threading.Tasks;
 
 namespace ScienceFuzz.Initialization.Console.Extensions

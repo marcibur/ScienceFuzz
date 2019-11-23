@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace ScienceFuzz.Web.Spa.Models.Charts
 {
-    public class DisciplinesChart
+    public class DomainsChart
     {
-        public DisciplinesChart(IEnumerable<ContributionModel> contributions)
+        public DomainsChart(IEnumerable<ContributionModel> contributions)
         {
             Data = new Data
             {
@@ -18,14 +18,14 @@ namespace ScienceFuzz.Web.Spa.Models.Charts
                     {
                         Data = contributions.Select(x => x.Value).ToArray(),
                         BackgroundColor = contributions.Select(x => "rgba(13, 162, 0, .5)").ToArray(),
-                        BorderColor = contributions.Select(x => "rgba(13, 162, 0, .5)").ToArray(),
+                        BorderColor =  contributions.Select(x => "rgba(13, 162, 0, .5)").ToArray(),
                         BorderWidth = 1
                     }
                 }
             };
         }
 
-        public string Type { get; } = "horizontalBar";
+        public string Type { get; } = "radar";
 
         public Data Data { get; private set; }
 

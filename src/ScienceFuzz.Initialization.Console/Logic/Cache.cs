@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Cosmos.Table;
+﻿using Microsoft.WindowsAzure.Storage;
 using ScienceFuzz.Initialization.Console.Config;
 using ScienceFuzz.Initialization.Console.Extensions;
 using System.Threading.Tasks;

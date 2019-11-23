@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
-using Microsoft.Azure.Cosmos.Table;
-using Microsoft.Azure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Table;
 using ScienceFuzz.Data;
 using ScienceFuzz.Initialization.Console.Config;
 using ScienceFuzz.Initialization.Console.Models;
@@ -21,7 +22,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             await SeedDisciplineContributionsAsync(tableClient);
             await SeedDomainContributionsAsync(tableClient);
 
-            var blobClient = Microsoft.Azure.Storage.CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
+            var blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
             await SeedDisciplineListAsync(blobClient);
         }
 
@@ -193,22 +194,27 @@ namespace ScienceFuzz.Initialization.Console.Logic
                 }));
             }
 
-            var groups = operations.GroupBy(x => x.Entity.PartitionKey);
-
-            var temp = groups.Where(x => x.Count() > 8).Select(x => x.Key).ToList();
-
             var count = 0;
-            foreach (var group in groups)
+            foreach (var operation in operations)
             {
-                var batch = new TableBatchOperation();
-                foreach (var operation in group)
-                {
-                    batch.Add(operation);
-                }
-                await domainContributionsTable.ExecuteBatchAsync(batch);
-                count += batch.Count;
+                await domainContributionsTable.ExecuteAsync(operation);
+                count++;
                 System.Console.WriteLine($"Domains seeded: {count}");
             }
+
+            //var groups = operations.GroupBy(x => x.Entity.PartitionKey);
+            //var count = 0;
+            //foreach (var group in groups)
+            //{
+            //    var batch = new TableBatchOperation();
+            //    foreach (var operation in group)
+            //    {
+            //        batch.Add(operation);
+            //    }
+            //    await domainContributionsTable.ExecuteBatchAsync(batch);
+            //    count += batch.Count;
+            //    System.Console.WriteLine($"Domains seeded: {count}");
+            //}
 
             System.Console.WriteLine("Domains seeded successfully.");
         }

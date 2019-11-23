@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ScienceFuzz.Serverless.Domains": {
+      "commandName": "Project",
+      "commandLineArgs": "host start --pause-on-error"
+    }
+  }
+}

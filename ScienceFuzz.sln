@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Http.Client", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless.Disciplines", "src\ScienceFuzz.Serverless.Disciplines\ScienceFuzz.Serverless.Disciplines.csproj", "{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Serverless.Domains", "src\ScienceFuzz.Serverless.Domains\ScienceFuzz.Serverless.Domains.csproj", "{1F689E36-F34D-469D-A817-8979BA2F6A44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F689E36-F34D-469D-A817-8979BA2F6A44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F689E36-F34D-469D-A817-8979BA2F6A44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F689E36-F34D-469D-A817-8979BA2F6A44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F689E36-F34D-469D-A817-8979BA2F6A44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +108,7 @@ Global
 		{3CE8A1BE-85AD-4E30-B634-DA7A59C72709} = {413692D0-D59F-40C9-BEE3-F31104B642B1}
 		{D5073CD6-AB58-43F4-B8B1-70492A92856E} = {413692D0-D59F-40C9-BEE3-F31104B642B1}
 		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
+		{1F689E36-F34D-469D-A817-8979BA2F6A44} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36FB526F-A843-426D-ACCC-9248CBA4CD62}

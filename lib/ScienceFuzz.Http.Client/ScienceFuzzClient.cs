@@ -17,7 +17,7 @@ namespace ScienceFuzz.Http.Client
             _uriBase = uriBase;
         }
 
-        public async Task<string[]> GetScientistNamesAsync()
+        public async Task<string[]> GetScientistNames()
         {
             var scientistNames = await _http.GetJsonAsync<string[]>($"{_uriBase}/Scientists/Names");
             return scientistNames;
@@ -33,6 +33,12 @@ namespace ScienceFuzz.Http.Client
         {
             var disciplineContributions = await _http.GetJsonAsync<IEnumerable<ContributionModel>>($"{_uriBase}/Scientists/{scientistName}/Disciplines/Contributions");
             return disciplineContributions;
+        }
+
+        public async Task<IEnumerable<ContributionModel>> GetDomainContributions(string scientistName)
+        {
+            var domainContributions = await _http.GetJsonAsync<IEnumerable<ContributionModel>>($"{_uriBase}/Scientists/{scientistName}/Domains/Contributions");
+            return domainContributions;
         }
     }
 }

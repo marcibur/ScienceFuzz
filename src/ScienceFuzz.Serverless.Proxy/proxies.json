@@ -21,6 +21,13 @@
         "route": "/api/Scientists/{scientistName}/Disciplines/Contributions"
       },
       "backendUri": "%DISCIPLINES_BACKEND_URI%/api/Scientists/{scientistName}/Disciplines/Contributions?code=%DISCIPLINES_SECRET%"
+    },
+    "ScientistDomainContributions": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/api/Scientists/{scientistName}/Domains/Contributions"
+      },
+      "backendUri": "%DOMAINS_BACKEND_URI%/api/Scientists/{scientistName}/Domains/Contributions?code=%DOMAINS_SECRET%"
     }
   }
 }
