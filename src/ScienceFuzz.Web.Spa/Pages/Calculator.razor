@@ -1,5 +1,6 @@
 ﻿@page "/Calculator"
 @inject Settings _settings
+@inject HttpClient _http
 @inject ScienceFuzzClient _httpClient
 @inject IJSRuntime _js
 
@@ -17,7 +18,7 @@
                         }
                         else
                         {
-                            <select class="form-control">
+                            <select class="form-control" @onchange="OnScientistSetAsync">
                                 @foreach (var scientistName in scientistNames)
                                 {
                                     <option value=@scientistName>@scientistName</option>
@@ -31,36 +32,43 @@
             <div class="col"></div>
         </div>
     </section>
-    <section class="calculator-spa-section">
-        <div class="shadow-lg journals-div">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-sm">
-                    <thead>
-                        <tr>
-                            <th>Czasopismo</th>
-                            <th>Ilość publikacji</th>
-                        </tr>
-                    </thead>
-                    @*<tbody>
-                            @if (scientist == null)
+    @if (publications == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <section class="calculator-spa-section">
+            <div class="shadow-lg journals-div">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Czasopismo</th>
+                                <th>Ilość publikacji</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (publications == null)
                             {
-                                <p><em>Loading...</em></p>
+
                             }
                             else
                             {
-                                @foreach (var publication in scientist.Publications)
+                                @foreach (var publication in publications)
                                 {
                                     <tr>
-                                        <td>@publication.Journal</td>
+                                        <td>@publication.Title</td>
                                         <td>@publication.Count</td>
                                     </tr>
                                 }
                             }
-                        </tbody>*@
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    }
     <section class="calculator-spa-section">
         <div class="row">
             <div class="col-12 col-lg-12 diagram-col">
@@ -76,9 +84,20 @@
 @code
 {
     private string[] scientistNames;
+    private IEnumerable<PublicationModel> publications;
 
     protected override async Task OnInitializedAsync()
     {
         scientistNames = await _httpClient.GetScientistNamesAsync();
+        await LoadPublicationsAsync(scientistNames[0]);
+    }
+
+    private async Task OnScientistSetAsync(ChangeEventArgs e) =>
+        await LoadPublicationsAsync(e.Value.ToString());
+
+    private async Task LoadPublicationsAsync(string scientistName)
+    {
+        publications = null;
+        publications = await _httpClient.GetScientistPublications(scientistName);
     }
 }

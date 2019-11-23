@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -11,10 +10,11 @@ using System.Threading.Tasks;
 namespace ScienceFuzz.Serverless.Scientists.Functions
 {
     // TODO: Refactor
+    // TODO: 404
     public static class GetPublications
     {
         [FunctionName(nameof(GetPublications))]
-        public static async Task<IActionResult> ExecuteAsync(
+        public static async Task<IEnumerable<PublicationModel>> ExecuteAsync(
             [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "Scientists/{scientistName}/Publications")] HttpRequest httpRequest,
             [Table(CONST.STORAGE_TABLE_NAMES.PUBLICATIONS, Connection = ENV.STORAGE_CONNECTION)] CloudTable publicationsTable,
             string scientistName)
@@ -32,7 +32,7 @@ namespace ScienceFuzz.Serverless.Scientists.Functions
                 });
             }
 
-            return new OkObjectResult(publications);
+            return publications;
         }
     }
 }

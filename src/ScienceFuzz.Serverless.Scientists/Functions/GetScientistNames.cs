@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -10,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace ScienceFuzz.Serverless.Scientists.Functions
 {
+    // TODO: Refactor
+    // TODO: 404
     public static class GetScientistNames
     {
         [FunctionName(nameof(GetScientistNames))]
-        public static async Task<IActionResult> ExecuteAsync(
+        public static async Task<IEnumerable<string>> ExecuteAsync(
             [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "Scientists/Names")] HttpRequest httpRequest,
             [Table(CONST.STORAGE_TABLE_NAMES.SCIENTISTS, Connection = ENV.STORAGE_CONNECTION)] CloudTable scientistsTable)
         {
@@ -26,7 +27,7 @@ namespace ScienceFuzz.Serverless.Scientists.Functions
             }
 
             scientistNames = scientistNames.OrderBy(x => int.Parse(x.Split('_')[1])).ToList();
-            return new OkObjectResult(scientistNames);
+            return scientistNames;
         }
     }
 }

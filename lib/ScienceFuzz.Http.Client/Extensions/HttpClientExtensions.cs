@@ -12,7 +12,7 @@ namespace ScienceFuzz.Http.Client.Extensions
             T result;
             using (var jsonStream = await http.GetStreamAsync(new Uri(uri)))
             {
-                result = await JsonSerializer.DeserializeAsync<T>(jsonStream);
+                result = await JsonSerializer.DeserializeAsync<T>(jsonStream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             }
             return result;
         }
