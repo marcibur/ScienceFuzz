@@ -11,13 +11,13 @@ namespace ScienceFuzz.Initialization.Console.Logic
         public static async Task RecreateAsync(Configuration config)
         {
             var tableClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudTableClient();
-            //await tableClient.RecreateTableAsync(Constants.StorageTableNames.Scientists);
-            //await tableClient.RecreateTableAsync(Constants.StorageTableNames.Publications);
-            //await tableClient.RecreateTableAsync(Constants.StorageTableNames.DisciplineContributions);
+            await tableClient.RecreateTableAsync(Constants.StorageTableNames.Scientists);
+            await tableClient.RecreateTableAsync(Constants.StorageTableNames.Publications);
+            await tableClient.RecreateTableAsync(Constants.StorageTableNames.DisciplineContributions);
             await tableClient.RecreateTableAsync(Constants.StorageTableNames.DomainContributions);
 
             var blobClient = Microsoft.Azure.Storage.CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
-            //await blobClient.RecreateContainerAsync(Constants.StorageContainerNames.Disciplines);
+            await blobClient.RecreateContainerAsync(Constants.StorageContainerNames.Disciplines);
         }
     }
 }

@@ -16,13 +16,13 @@ namespace ScienceFuzz.Initialization.Console.Logic
         public static async Task SeedAsync(Configuration config)
         {
             var tableClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudTableClient();
-            //await SeedScientistsAsync(tableClient);
-            //await SeedPublicationsAsync(tableClient);
-            //await SeedDisciplineContributionsAsync(tableClient);
+            await SeedScientistsAsync(tableClient);
+            await SeedPublicationsAsync(tableClient);
+            await SeedDisciplineContributionsAsync(tableClient);
             await SeedDomainContributionsAsync(tableClient);
 
-            //var blobClient = Microsoft.Azure.Storage.CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
-            //await SeedDisciplineListAsync(blobClient);
+            var blobClient = Microsoft.Azure.Storage.CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
+            await SeedDisciplineListAsync(blobClient);
         }
 
         static async Task SeedScientistsAsync(CloudTableClient tableClient)
@@ -101,45 +101,6 @@ namespace ScienceFuzz.Initialization.Console.Logic
                 contributionsCsvModels = csv.GetRecords<DisciplineContributionCsvModel>().ToList();
             }
 
-            //var d = new Dictionary<string, int>();
-            //var err = contributionsCsvModels.Select(x => x.Journal);
-            //foreach (var e in err)
-            //{
-            //    if (!d.ContainsKey(e))
-            //    {
-            //        d[e] = 1;
-            //    }
-            //    else
-            //    {
-            //        d[e] = d[e] + 1;
-            //    }
-            //}
-
-            //var elo = d.Where(x => x.Value > 1).ToList();
-
-            //var list = new List<DisciplineContributionCsvModel>();
-            //foreach (var contrib in contributionsCsvModels)
-            //{
-            //    var dic = new Dictionary<string, int>();
-            //    foreach (var disc in contrib.Disciplines)
-            //    {
-            //        if (!dic.ContainsKey(disc))
-            //        {
-            //            dic[disc] = 1;
-            //        }
-            //        else
-            //        {
-            //            dic[disc] = dic[disc] + 1;
-            //        }
-            //    }
-            //    if (dic.Any(x => x.Value > 1))
-            //    {
-            //        list.Add(contrib);
-            //    }
-            //}
-
-            //var dupa = list;
-
             var count = 0;
             foreach (var contribution in contributionsCsvModels)
             {
@@ -152,16 +113,9 @@ namespace ScienceFuzz.Initialization.Console.Logic
                         RowKey = discipline
                     }));
                 }
-                try
-                {
-                    await disciplineContributionsTable.ExecuteBatchAsync(batch);
-                    count += batch.Count;
-                    System.Console.WriteLine($"Disciplines seeded: {count}");
-                }
-                catch (System.Exception e)
-                {
-                    throw;
-                }
+                await disciplineContributionsTable.ExecuteBatchAsync(batch);
+                count += batch.Count;
+                System.Console.WriteLine($"Disciplines seeded: {count}");
             }
 
             System.Console.WriteLine("Disciplines seeded successfully.");
@@ -240,6 +194,9 @@ namespace ScienceFuzz.Initialization.Console.Logic
             }
 
             var groups = operations.GroupBy(x => x.Entity.PartitionKey);
+
+            var temp = groups.Where(x => x.Count() > 8).Select(x => x.Key).ToList();
+
             var count = 0;
             foreach (var group in groups)
             {
@@ -248,16 +205,9 @@ namespace ScienceFuzz.Initialization.Console.Logic
                 {
                     batch.Add(operation);
                 }
-                try
-                {
-                    await domainContributionsTable.ExecuteBatchAsync(batch);
-                    count += batch.Count;
-                    System.Console.WriteLine($"Domains seeded: {count}");
-                }
-                catch (System.Exception e)
-                {
-                    throw;
-                }
+                await domainContributionsTable.ExecuteBatchAsync(batch);
+                count += batch.Count;
+                System.Console.WriteLine($"Domains seeded: {count}");
             }
 
             System.Console.WriteLine("Domains seeded successfully.");

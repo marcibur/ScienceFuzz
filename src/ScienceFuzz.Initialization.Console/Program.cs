@@ -10,7 +10,7 @@ namespace ScienceFuzz.Initialization.Console
         {
             var config = await Configuration.LoadFromFileAsync(@"Config/configuration.json");
             await Storage.RecreateAsync(config);
-            //await Cache.RecreateAsync(config);
+            await Cache.RecreateAsync(config);
             await Seed.SeedAsync(config);
         }
     }
