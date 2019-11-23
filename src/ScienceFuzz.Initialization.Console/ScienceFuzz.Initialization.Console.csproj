@@ -19,6 +19,9 @@
     <None Update="Config\configuration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Data\disciplines.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Data\publications.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -28,7 +31,7 @@
     <None Update="Data\disciplineContributions.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\domainContributions.csv">
+    <None Update="Data\domains.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Data\scientists.csv">

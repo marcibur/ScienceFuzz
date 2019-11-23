@@ -128,7 +128,7 @@ namespace ScienceFuzz.Initialization.Console
             var disciplineContributionsTable = tableClient.GetTableReference(Constants.StorageTableNames.DisciplineContributions);
 
             List<DisciplineContributionCsvModel> contributionsCsvModels;
-            using (var reader = new StreamReader(@"Data\disciplineContributions.csv"))
+            using (var reader = new StreamReader(@"Data\disciplines.csv"))
             using (var csv = new CsvReader(reader))
             {
                 contributionsCsvModels = csv.GetRecords<DisciplineContributionCsvModel>().ToList();
@@ -171,7 +171,9 @@ namespace ScienceFuzz.Initialization.Console
             //    }
             //}
 
-            //var d = list;
+            //var dupa = list;
+
+
             var batches = new List<TableBatchOperation>();
             foreach (var contribution in contributionsCsvModels)
             {
@@ -227,7 +229,7 @@ namespace ScienceFuzz.Initialization.Console
             var domainContributionsTable = tableClient.GetTableReference(Constants.StorageTableNames.DomainContributions);
 
             List<DomainContributionCsvModel> contributionsCsvModels;
-            using (var reader = new StreamReader(@"Data\domainContributions.csv"))
+            using (var reader = new StreamReader(@"Data\domains.csv"))
             using (var csv = new CsvReader(reader))
             {
                 contributionsCsvModels = csv.GetRecords<DomainContributionCsvModel>().ToList();
