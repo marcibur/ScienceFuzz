@@ -28,7 +28,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
         static async Task SeedScientistsAsync(CloudTableClient tableClient)
         {
             System.Console.WriteLine("Seeding scientists...");
-            var scientistsTable = tableClient.GetTableReference(Constants.StorageTableNames.Scientists);
+            var scientistsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.SCIENTISTS);
 
             List<ScientistCsvModel> scientistCsvModels;
             using (var reader = new StreamReader(@"Data\scientists.csv"))
@@ -60,7 +60,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
         static async Task SeedPublicationsAsync(CloudTableClient tableClient)
         {
             System.Console.WriteLine("Seeding publications...");
-            var publicatonsTable = tableClient.GetTableReference(Constants.StorageTableNames.Publications);
+            var publicatonsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.PUBLICATIONS);
 
             List<PublicationCsvModel> publicationCsvModels;
             using (var reader = new StreamReader(@"Data\publications.csv"))
@@ -92,7 +92,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
         static async Task SeedDisciplineContributionsAsync(CloudTableClient tableClient)
         {
             System.Console.WriteLine("Seeding disciplines...");
-            var disciplineContributionsTable = tableClient.GetTableReference(Constants.StorageTableNames.DisciplineContributions);
+            var disciplineContributionsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.DISCIPLINE_CONTRIBUTIONS);
 
             List<DisciplineContributionCsvModel> contributionsCsvModels;
             using (var reader = new StreamReader(@"Data\disciplines.csv"))
@@ -124,7 +124,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
         static async Task SeedDomainContributionsAsync(CloudTableClient tableClient)
         {
             System.Console.WriteLine("Seeding domains...");
-            var domainContributionsTable = tableClient.GetTableReference(Constants.StorageTableNames.DomainContributions);
+            var domainContributionsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS);
 
             List<DomainContributionCsvModel> contributionsCsvModels;
             using (var reader = new StreamReader(@"Data\domains.csv"))
@@ -139,56 +139,56 @@ namespace ScienceFuzz.Initialization.Console.Logic
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Humanities,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.HUMANITIES,
                     Count = contribution.Humanities
                 }));
 
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Technology,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.TECHNOLOGY,
                     Count = contribution.Technology
                 }));
 
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Medical,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.MEDICAL,
                     Count = contribution.Medical
                 }));
 
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Farm,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.FARM,
                     Count = contribution.Farm
                 }));
 
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Social,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.SOCIAL,
                     Count = contribution.Social
                 }));
 
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Science,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.SCIENCE,
                     Count = contribution.Science
                 }));
 
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Religion,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.RELIGION,
                     Count = contribution.Religion
                 }));
 
                 operations.Add(TableOperation.Insert(new DomainContribution
                 {
                     PartitionKey = contribution.Journal,
-                    RowKey = Constants.ScienceDomainNames.Arts,
+                    RowKey = CONST.SCIENCE_DOMAIN_NAMES.ARTS,
                     Count = contribution.Arts
                 }));
             }
@@ -216,9 +216,9 @@ namespace ScienceFuzz.Initialization.Console.Logic
         private static async Task SeedDisciplineListAsync(CloudBlobClient blobClient)
         {
             System.Console.WriteLine("Seeding discipline list...");
-            var container = blobClient.GetContainerReference(Constants.StorageContainerNames.Disciplines);
-            var blob = container.GetBlockBlobReference(Constants.FileNames.DisciplineList);
-            await blob.UploadFromFileAsync(@$"Data\{Constants.FileNames.DisciplineList}");
+            var container = blobClient.GetContainerReference(CONST.STORAGE_CONTAINER_NAMES.DISCIPLINES);
+            var blob = container.GetBlockBlobReference(CONST.FILE_NAMES.DISCIPLINE_LIST);
+            await blob.UploadFromFileAsync(@$"Data\{CONST.FILE_NAMES.DISCIPLINE_LIST}");
             System.Console.WriteLine("Discipline list seeded successfully.");
         }
     }

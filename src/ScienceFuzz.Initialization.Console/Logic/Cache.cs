@@ -10,10 +10,10 @@ namespace ScienceFuzz.Initialization.Console.Logic
         public static async Task RecreateAsync(Configuration config)
         {
             var tableClient = CloudStorageAccount.Parse(config.CacheConnection).CreateCloudTableClient();
-            await tableClient.RecreateTableAsync(Constants.CacheTableNames.DiscipilneContributions);
-            await tableClient.RecreateTableAsync(Constants.CacheTableNames.DomainContributions);
-            await tableClient.RecreateTableAsync(Constants.CacheTableNames.Tsne);
-            await tableClient.RecreateTableAsync(Constants.CacheTableNames.Kmeans);
+            await tableClient.RecreateTableAsync(CONST.CACHE_TABLE_NAMES.DISCIPLINE_CONTRIBUTIONS);
+            await tableClient.RecreateTableAsync(CONST.CACHE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS);
+            await tableClient.RecreateTableAsync(CONST.CACHE_TABLE_NAMES.TSNE);
+            await tableClient.RecreateTableAsync(CONST.CACHE_TABLE_NAMES.KMEANS);
         }
     }
 }

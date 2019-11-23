@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" Version="7.2.1" />
+    <ProjectReference Include="..\ScienceFuzz\ScienceFuzz.csproj" />
   </ItemGroup>
 
 </Project>
