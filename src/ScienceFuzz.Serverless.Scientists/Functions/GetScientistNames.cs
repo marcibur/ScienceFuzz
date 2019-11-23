@@ -19,14 +19,8 @@ namespace ScienceFuzz.Serverless.Scientists.Functions
             [Table(CONST.STORAGE_TABLE_NAMES.SCIENTISTS, Connection = ENV.STORAGE_CONNECTION)] CloudTable scientistsTable)
         {
             var query = new TableQuery<Scientist>().Select(new string[] { nameof(Scientist.RowKey) });
-
-            var scientistNames = new List<string>();
-            foreach (Scientist scientist in await scientistsTable.ExecuteQuerySegmentedAsync(query, null))
-            {
-                scientistNames.Add(scientist.RowKey);
-            }
-
-            scientistNames = scientistNames.OrderBy(x => int.Parse(x.Split('_')[1])).ToList();
+            var queryResult = await scientistsTable.ExecuteQuerySegmentedAsync(query, null);
+            var scientistNames = queryResult.Results.Select(x => x.RowKey).OrderBy(x => int.Parse(x.Split('_')[1])).ToList();
             return scientistNames;
         }
     }

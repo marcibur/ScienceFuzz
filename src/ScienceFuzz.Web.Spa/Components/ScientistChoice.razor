@@ -1,0 +1,37 @@
+﻿<Loading Visible="LoadingVisibility" />
+<section class="calculator-spa-section @Visibility">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col col-12 col-md-6">
+            <form>
+                <h4 class="scientist-choose-heading">Wybierz naukowca</h4>
+                <div class="form-group">
+                    <select class="form-control" @onchange="OnScientistSelected">
+                        @if (Scientists != null)
+                        {
+                            @foreach (var scientistName in Scientists)
+                            {
+                                <option value=@scientistName>@scientistName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</section>
+
+
+@code
+{
+    [Parameter]
+    public string[] Scientists { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnScientistSelected { get; set; }
+
+    public bool LoadingVisibility => Scientists == null;
+
+    public string Visibility => Scientists != null ? "visible" : "hidden";
+}

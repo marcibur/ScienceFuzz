@@ -28,5 +28,11 @@ namespace ScienceFuzz.Http.Client
             var publications = await _http.GetJsonAsync<IEnumerable<PublicationModel>>($"{_uriBase}/Scientists/{scientistName}/Publications");
             return publications;
         }
+
+        public async Task<IEnumerable<ContributionModel>> GetDisciplineContributions(string scientistName)
+        {
+            var disciplineContributions = await _http.GetJsonAsync<IEnumerable<ContributionModel>>($"{_uriBase}/Scientists/{scientistName}/Disciplines/Contributions");
+            return disciplineContributions;
+        }
     }
 }

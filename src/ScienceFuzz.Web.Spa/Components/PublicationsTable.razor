@@ -1,0 +1,37 @@
+﻿<Loading Visible="LoadingVisibility" />
+<section class="calculator-spa-section @Visibility">
+    <div class="shadow-lg journals-div">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th>Czasopismo</th>
+                        <th>Ilość publikacji</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Publications != null)
+                    {
+                        @foreach (var publication in Publications)
+                        {
+                            <tr>
+                                <td>@publication.Title</td>
+                                <td>@publication.Count</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@code
+{
+    [Parameter]
+    public IEnumerable<PublicationModel> Publications { get; set; }
+
+    public bool LoadingVisibility => Publications == null;
+
+    public string Visibility => Publications != null ? "visible" : "hidden";
+}

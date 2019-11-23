@@ -14,6 +14,13 @@
         "route": "/api/Scientists/Names"
       },
       "backendUri": "%SCIENTISTS_BACKEND_URI%/api/Scientists/Names?code=%SCIENTISTS_SECRET%"
+    },
+    "ScientistDisciplineContributions": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/api/Scientists/{scientistName}/Disciplines/Contributions"
+      },
+      "backendUri": "%DISCIPLINES_BACKEND_URI%/api/Scientists/{scientistName}/Disciplines/Contributions?code=%DISCIPLINES_SECRET%"
     }
   }
 }

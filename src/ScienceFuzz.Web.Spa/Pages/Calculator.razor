@@ -1,103 +1,41 @@
 ﻿@page "/Calculator"
-@inject Settings _settings
-@inject HttpClient _http
 @inject ScienceFuzzClient _httpClient
 @inject IJSRuntime _js
 
 <main class="naukowiec-choose-main">
-    <section class="calculator-spa-section">
-        <div class="row">
-            <div class="col"></div>
-            <div class="col col-12 col-md-6">
-                <form>
-                    <h4 class="scientist-choose-heading">Wybierz naukowca</h4>
-                    <div class="form-group">
-                        @if (scientistNames == null)
-                        {
-                            <p><em>Loading...</em></p>
-                        }
-                        else
-                        {
-                            <select class="form-control" @onchange="OnScientistSetAsync">
-                                @foreach (var scientistName in scientistNames)
-                                {
-                                    <option value=@scientistName>@scientistName</option>
-                                }
-
-                            </select>
-                        }
-                    </div>
-                </form>
-            </div>
-            <div class="col"></div>
-        </div>
-    </section>
-    @if (publications == null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-        <section class="calculator-spa-section">
-            <div class="shadow-lg journals-div">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th>Czasopismo</th>
-                                <th>Ilość publikacji</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (publications == null)
-                            {
-
-                            }
-                            else
-                            {
-                                @foreach (var publication in publications)
-                                {
-                                    <tr>
-                                        <td>@publication.Title</td>
-                                        <td>@publication.Count</td>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    }
-    <section class="calculator-spa-section">
-        <div class="row">
-            <div class="col-12 col-lg-12 diagram-col">
-                <div><canvas id="chart-disciplines-bars"></canvas></div>
-            </div>
-            <div class="col-12 col-lg-12 diagram-col">
-                <div><canvas id="chart-domains-radar"></canvas></div>
-            </div>
-        </div>
-    </section>
+    <ScientistChoice Scientists="Scientists" OnScientistSelected="OnScientistSet" />
+    <PublicationsTable Publications="Publications" />
+    <Disciplines Chart="DisciplinesChart" />
 </main>
 
 @code
 {
-    private string[] scientistNames;
-    private IEnumerable<PublicationModel> publications;
+    public string[] Scientists { get; set; }
+    public IEnumerable<PublicationModel> Publications { get; set; }
+    public DisciplinesChart DisciplinesChart { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        scientistNames = await _httpClient.GetScientistNamesAsync();
-        await LoadPublicationsAsync(scientistNames[0]);
+        Scientists = await _httpClient.GetScientistNamesAsync();
+        await LoadPublications(Scientists[0]);
+        await LoadDisciplinesChart(Scientists[0]);
     }
 
-    private async Task OnScientistSetAsync(ChangeEventArgs e) =>
-        await LoadPublicationsAsync(e.Value.ToString());
-
-    private async Task LoadPublicationsAsync(string scientistName)
+    public async Task OnScientistSet(ChangeEventArgs e)
     {
-        publications = null;
-        publications = await _httpClient.GetScientistPublications(scientistName);
+        Publications = null;
+        DisciplinesChart = null;
+        var scientist = e.Value.ToString();
+        await LoadPublications(scientist);
+        await LoadDisciplinesChart(scientist);
+    }
+
+    public async Task LoadPublications(string scientist) =>
+        Publications = await _httpClient.GetScientistPublications(scientist);
+
+    public async Task LoadDisciplinesChart(string scientist)
+    {
+        DisciplinesChart = new DisciplinesChart(await _httpClient.GetDisciplineContributions(scientist));
+        await _js.InvokeVoidAsync("loadDisciplinesChart", DisciplinesChart);
     }
 }

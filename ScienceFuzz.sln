@@ -19,15 +19,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Initialization.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Data", "lib\ScienceFuzz.Data\ScienceFuzz.Data.csproj", "{5A83E093-1A6E-448D-9689-AFD96B510412}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Serverless.Scientists", "src\ScienceFuzz.Serverless.Scientists\ScienceFuzz.Serverless.Scientists.csproj", "{C0734F60-A353-4658-A99F-F4CE7047AEB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless.Scientists", "src\ScienceFuzz.Serverless.Scientists\ScienceFuzz.Serverless.Scientists.csproj", "{C0734F60-A353-4658-A99F-F4CE7047AEB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Serverless", "lib\ScienceFuzz.Serverless\ScienceFuzz.Serverless.csproj", "{BEF16516-CB4E-4B7D-BE8B-63E535E7B862}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless", "lib\ScienceFuzz.Serverless\ScienceFuzz.Serverless.csproj", "{BEF16516-CB4E-4B7D-BE8B-63E535E7B862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Serverless.Proxy", "src\ScienceFuzz.Serverless.Proxy\ScienceFuzz.Serverless.Proxy.csproj", "{4E5EA04E-5152-4695-B985-AD9A2FE45108}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless.Proxy", "src\ScienceFuzz.Serverless.Proxy\ScienceFuzz.Serverless.Proxy.csproj", "{4E5EA04E-5152-4695-B985-AD9A2FE45108}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Models.Shared", "lib\ScienceFuzz.Models.Shared\ScienceFuzz.Models.Shared.csproj", "{3CE8A1BE-85AD-4E30-B634-DA7A59C72709}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Http.Client", "lib\ScienceFuzz.Http.Client\ScienceFuzz.Http.Client.csproj", "{D5073CD6-AB58-43F4-B8B1-70492A92856E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Http.Client", "lib\ScienceFuzz.Http.Client\ScienceFuzz.Http.Client.csproj", "{D5073CD6-AB58-43F4-B8B1-70492A92856E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless.Disciplines", "src\ScienceFuzz.Serverless.Disciplines\ScienceFuzz.Serverless.Disciplines.csproj", "{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{D5073CD6-AB58-43F4-B8B1-70492A92856E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5073CD6-AB58-43F4-B8B1-70492A92856E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5073CD6-AB58-43F4-B8B1-70492A92856E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{4E5EA04E-5152-4695-B985-AD9A2FE45108} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 		{3CE8A1BE-85AD-4E30-B634-DA7A59C72709} = {413692D0-D59F-40C9-BEE3-F31104B642B1}
 		{D5073CD6-AB58-43F4-B8B1-70492A92856E} = {413692D0-D59F-40C9-BEE3-F31104B642B1}
+		{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B} = {D75F6C9F-290C-4DF7-9018-0AE3F2059B7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36FB526F-A843-426D-ACCC-9248CBA4CD62}

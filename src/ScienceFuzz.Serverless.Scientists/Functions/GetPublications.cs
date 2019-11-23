@@ -5,6 +5,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using ScienceFuzz.Data;
 using ScienceFuzz.Models.Shared;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ScienceFuzz.Serverless.Scientists.Functions
@@ -22,15 +23,12 @@ namespace ScienceFuzz.Serverless.Scientists.Functions
             var query = new TableQuery<Publication>().Where(
                   TableQuery.GenerateFilterCondition(nameof(Publication.PartitionKey), QueryComparisons.Equal, scientistName));
 
-            var publications = new List<PublicationModel>();
-            foreach (Publication publication in await publicationsTable.ExecuteQuerySegmentedAsync(query, null))
+            var queryResult = await publicationsTable.ExecuteQuerySegmentedAsync(query, null);
+            var publications = queryResult.Results.Select(x => new PublicationModel
             {
-                publications.Add(new PublicationModel
-                {
-                    Title = publication.RowKey,
-                    Count = publication.Count
-                });
-            }
+                Title = x.RowKey,
+                Count = x.Count
+            }).ToList();
 
             return publications;
         }

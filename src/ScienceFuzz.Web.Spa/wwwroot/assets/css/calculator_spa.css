@@ -1,9 +1,14 @@
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 }
 
+.naukowiec-choose-main {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
 .tsne-main {
-  margin-left: 20px;
-  margin-right: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .naukowiec-choose-div {
@@ -37,3 +42,10 @@ scientist-choose-heading {
   text-align: left;
 }
 
+.hidden{
+    visibility: hidden
+}
+
+.visible{
+    visibility: visible
+}
