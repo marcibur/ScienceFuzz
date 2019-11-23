@@ -13,7 +13,11 @@
         public static class StorageContainerNames
         {
             public const string Disciplines = "disciplines";
-            public const string Domains = "domains";
+        }
+
+        public static class FileNames
+        {
+            public const string DisciplineList = "disciplinesList.txt";
         }
 
         public static class CacheTableNames

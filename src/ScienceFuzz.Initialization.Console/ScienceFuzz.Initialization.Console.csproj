@@ -25,7 +25,7 @@
     <None Update="Data\disciplines.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\disciplines.txt">
+    <None Update="Data\disciplinesList.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Data\disciplineContributions.csv">
