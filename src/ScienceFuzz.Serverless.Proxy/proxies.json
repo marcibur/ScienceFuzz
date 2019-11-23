@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "http://json.schemastore.org/proxies",
+  "proxies": {
+    "Scientists": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/api/Publications/{scientistName}"
+      },
+      "backendUri": "%SCIENTISTS_BACKEND_URI%/api/Publications/{scientistName}"
+    }
+  }
+}

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ScienceFuzz.Serverless.Scientists
 {
+    // TODO: Refactor
     public static class GetPublications
     {
         [FunctionName(nameof(GetPublications))]
