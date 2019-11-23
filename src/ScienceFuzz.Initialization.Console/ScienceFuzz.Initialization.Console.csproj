@@ -19,10 +19,10 @@
     <None Update="Config\configuration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\disciplines.csv">
+    <None Update="Data\publications.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\publications.csv">
+    <None Update="Data\disciplines.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Data\disciplines.txt">
