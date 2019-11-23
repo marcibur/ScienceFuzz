@@ -19,7 +19,7 @@
                         }
                         else
                         {
-                            <select class="form-control" @onchange="OnScientistSelected">
+                            <select class="form-control">
                                 @foreach (var scientistName in scientistNames)
                                 {
                                     <option value=@scientistName>@scientistName</option>
@@ -43,22 +43,22 @@
                             <th>Ilość publikacji</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @if (scientist == null)
-                        {
-                            <p><em>Loading...</em></p>
-                        }
-                        else
-                        {
-                            @foreach (var publication in scientist.Publications)
+                    @*<tbody>
+                            @if (scientist == null)
                             {
-                                <tr>
-                                    <td>@publication.Journal</td>
-                                    <td>@publication.Count</td>
-                                </tr>
+                                <p><em>Loading...</em></p>
                             }
-                        }
-                    </tbody>
+                            else
+                            {
+                                @foreach (var publication in scientist.Publications)
+                                {
+                                    <tr>
+                                        <td>@publication.Journal</td>
+                                        <td>@publication.Count</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>*@
                 </table>
             </div>
         </div>
@@ -77,65 +77,10 @@
 
 @code
 {
-    private Scientist scientist;
     private string[] scientistNames;
 
     protected override async Task OnInitializedAsync()
     {
-        scientistNames = await _http.GetJsonAsync<string[]>($"{_settings.ApiRootUrl}scientists");
-        await SetScientistAsync(scientistNames[0]);
-    }
-
-    private async Task OnScientistSelected(ChangeEventArgs e)
-    {
-        await SetScientistAsync(e.Value.ToString());
-    }
-
-
-
-    private async Task SetScientistAsync(string scientistName)
-    {
-        scientist = await _http.GetJsonAsync<Scientist>($"{_settings.ApiRootUrl}scientists/{scientistName}");
-
-        var barChartViewModel = new ChartViewModel
-        {
-            Labels = scientist.DisciplineContributions.Select(x => x.Name).ToArray(),
-            Datasets = new DataSet[]
-            {
-                new DataSet
-                {
-                    Data = scientist.DisciplineContributions.Select(x => x.Value).ToArray()
-                }
-                                }
-        };
-
-        await _js.InvokeVoidAsync("setDisciplinesChart", barChartViewModel);
-
-        var radarChartViewModel = new ChartViewModel
-        {
-            Labels = scientist.DomainContributions.Select(x => x.Name).ToArray(),
-            Datasets = new DataSet[]
-           {
-                new DataSet
-                {
-                    Data = scientist.DomainContributions.Select(x => x.Value).ToArray()
-                }
-                                }
-        };
-
-        await _js.InvokeVoidAsync("setDomainsChart", radarChartViewModel);
-    }
-
-
-
-    public class ChartViewModel
-    {
-        public string[] Labels { get; set; }
-        public DataSet[] Datasets { get; set; }
-    }
-
-    public class DataSet
-    {
-        public double[] Data { get; set; }
+        scientistNames = await _http.GetJsonAsync<string[]>($"{_settings.ApiRootUri}/Scientists/Names");
     }
 }

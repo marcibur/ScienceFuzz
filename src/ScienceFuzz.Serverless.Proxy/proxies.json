@@ -1,12 +1,19 @@
 ﻿{
   "$schema": "http://json.schemastore.org/proxies",
   "proxies": {
-    "Scientists": {
+    "ScientistPublications": {
       "matchCondition": {
         "methods": [ "GET" ],
-        "route": "/api/Publications/{scientistName}"
+        "route": "/api/Scientists/{scientistName}/Publications"
       },
-      "backendUri": "%SCIENTISTS_BACKEND_URI%/api/Publications/{scientistName}"
+      "backendUri": "%SCIENTISTS_BACKEND_URI%/api/Scientists/{scientistName}/Publications?code=%SCIENTISTS_SECRET%"
+    },
+    "ScientistNames": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/api/Scientists/Names"
+      },
+      "backendUri": "%SCIENTISTS_BACKEND_URI%/api/Scientists/Names?code=%SCIENTISTS_SECRET%"
     }
   }
 }

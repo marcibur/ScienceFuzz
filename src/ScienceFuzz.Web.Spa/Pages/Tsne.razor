@@ -17,11 +17,11 @@
 
 @code
 {
-    private List<TsneModel> models;
+    //private List<TsneModel> models;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        models = await _http.GetJsonAsync<List<TsneModel>>($"{_settings.ApiRootUrl}scientists/contributions/domains");
-        await _js.InvokeVoidAsync("setTsne", models);
-    }
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    models = await _http.GetJsonAsync<List<TsneModel>>($"{_settings.ApiRootUrl}scientists/contributions/domains");
+    //    await _js.InvokeVoidAsync("setTsne", models);
+    //}
 }

@@ -2,7 +2,7 @@
 {
     public class Settings
     {
-        //public string ApiRootUrl = "http://localhost:7071/api/";
-        public string ApiRootUrl = "https://sciencefuzz-api.azurewebsites.net/api/";
+        public string ApiRootUri = "http://localhost:5000/api";
+        //public string ApiRootUri = "https://sciencefuzz-api.azurewebsites.net/api";
     }
 }

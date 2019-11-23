@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\ScienceFuzz.Models\ScienceFuzz.Models.csproj" />
+    <ProjectReference Include="..\..\lib\ScienceFuzz.Models.Shared\ScienceFuzz.Models.Shared.csproj" />
   </ItemGroup>
 
 </Project>

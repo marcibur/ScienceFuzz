@@ -15,12 +15,12 @@ namespace ScienceFuzz.Serverless.Scientists
     {
         [FunctionName(nameof(GetPublications))]
         public static async Task<IActionResult> ExecuteAsync(
-            [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "Publications/{scientistName}")] HttpRequest httpRequest,
+            [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "Scientists/{scientistName}/Publications")] HttpRequest httpRequest,
             [Table(CONST.STORAGE_TABLE_NAMES.PUBLICATIONS, Connection = ENV.STORAGE_CONNECTION)] CloudTable publicationsTable,
             string scientistName)
         {
             var query = new TableQuery<Publication>().Where(
-                  TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, scientistName));
+                  TableQuery.GenerateFilterCondition(nameof(Publication.PartitionKey), QueryComparisons.Equal, scientistName));
 
             var publications = new List<PublicationModel>();
             foreach (Publication publication in await publicationsTable.ExecuteQuerySegmentedAsync(query, null))
