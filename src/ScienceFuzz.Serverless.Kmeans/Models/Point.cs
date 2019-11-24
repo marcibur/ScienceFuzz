@@ -6,7 +6,12 @@ namespace ScienceFuzz.Serverless.Kmeans.Models
     {
         public string Label { get; set; }
 
+        [VectorType(8)]
+        public float[] Contributions { get; set; }
+
         [VectorType(2)]
-        public float[] Location { get; set; }
+        public float[] Score { get; set; }
+
+        public uint PredictedLabel { get; set; }
     }
 }

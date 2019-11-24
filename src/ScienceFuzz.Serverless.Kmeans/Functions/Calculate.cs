@@ -5,6 +5,7 @@ using Microsoft.ML;
 using Microsoft.ML.Trainers;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
+using ScienceFuzz.Data;
 using ScienceFuzz.Models.Shared;
 using ScienceFuzz.Serverless.Kmeans.Models;
 using System;
@@ -26,25 +27,28 @@ namespace ScienceFuzz.Serverless.Kmeans.Functions
             [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "Scientists/Kmeans")] HttpRequest httpRequest,
             [Table(CONST.STORAGE_TABLE_NAMES.SCIENTISTS, Connection = ENV.STORAGE_CONNECTION)] CloudTable scientistsTable)
         {
-            var query = new TableQuery<Data.Scientist>();
+            var query = new TableQuery<Scientist>();
             var queryResult = await scientistsTable.ExecuteQuerySegmentedAsync(query, null);
-            var scientists = queryResult.ToArray();
-            var scientistsNames = scientists.Select(x => x.RowKey).ToArray();
+            var scientists = queryResult.Results.ToList();
 
-            IEnumerable<TsneModel> tsne;
-            var tsneUri = Environment.GetEnvironmentVariable("TSNE_URI");
-            var tsneString = await _http.GetStringAsync(tsneUri);
-            tsne = JsonConvert.DeserializeObject<IEnumerable<TsneModel>>(tsneString);
+            IEnumerable<ContributionsModel> domainContributions;
+            var domainsUri = Environment.GetEnvironmentVariable("DOMAINS_URI");
+            var domainsString = await _http.GetStringAsync(domainsUri);
+            domainContributions = JsonConvert.DeserializeObject<IEnumerable<ContributionsModel>>(domainsString);
 
             var points = new List<Point>();
             foreach (var scientist in scientists)
             {
-                var location = tsne.First(x => x.Scientist == scientist.RowKey).Point;
-                points.Add(new Point
+                var contributions = domainContributions.Where(x => x.Scientist == scientist.RowKey);
+                foreach (var contribution in contributions)
                 {
-                    Label = scientist.PartitionKey,
-                    Location = new float[] { (float)location.X, (float)location.Y }
-                });
+                    points.Add(new Point
+                    {
+                        Label = scientist.PartitionKey,
+                        Contributions = contribution.Contributions.Select(x => (float)x.Value).ToArray()
+                        //Result = new float[2]
+                    });
+                }
             }
 
 
@@ -52,16 +56,15 @@ namespace ScienceFuzz.Serverless.Kmeans.Functions
             var mlContext = new MLContext(seed: 1);
             var kmeansOptions = new KMeansTrainer.Options
             {
-                InitializationAlgorithm = KMeansTrainer.InitializationAlgorithm.KMeansPlusPlus,
-                FeatureColumnName = nameof(Point.Location),
-                OptimizationTolerance = 0.000000000001f,
-                MaximumNumberOfIterations = int.MaxValue,
+                OptimizationTolerance = 0.1f,
+                FeatureColumnName = nameof(Point.Contributions),
+                MaximumNumberOfIterations = 100,
                 NumberOfClusters = 2
             };
 
             var trainingData = mlContext.Data.LoadFromEnumerable(points);
-            var dataProcessingPipeline = mlContext.Transforms.Categorical.OneHotEncoding(nameof(Point.Location), nameof(Point.Label))
-                .Append(mlContext.Transforms.ProjectToPrincipalComponents(nameof(Point.Location), rank: 2));
+            var dataProcessingPipeline = mlContext.Transforms.Categorical.OneHotEncoding(nameof(Point.PredictedLabel), nameof(Point.Label))
+                .Append(mlContext.Transforms.ProjectToPrincipalComponents(nameof(Point.Score), nameof(Point.Contributions), rank: 2));
             var trainer = mlContext.Clustering.Trainers.KMeans(kmeansOptions);
             var trainingPipeline = dataProcessingPipeline.Append(trainer);
             var trainedModel = trainer.Fit(trainingData);
@@ -86,8 +89,8 @@ namespace ScienceFuzz.Serverless.Kmeans.Functions
 
                 unit.Points.Add(new PointModel
                 {
-                    X = point.Location[0],
-                    Y = point.Location[1]
+                    X = point.Score[0],
+                    Y = point.Score[1]
                 });
             }
 
