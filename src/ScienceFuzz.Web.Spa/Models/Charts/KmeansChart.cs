@@ -6,36 +6,38 @@ using System.Linq;
 
 namespace ScienceFuzz.Web.Spa.Models.Charts
 {
-    public class TsneChart
+    public class KmeansChart
     {
-        public TsneChart(IEnumerable<TsneModel> tsne)
+        public KmeansChart(IEnumerable<KmeansModel> kmeans)
         {
+            var kmeansArray = kmeans.ToArray();
+
             Data = new BubbleData
             {
-                Datasets = new BubbleDataSet[tsne.Count()]
+                Datasets = new BubbleDataSet[kmeans.Count()]
             };
 
-            var i = 0;
-            tsne.ToList().ForEach(x =>
+            for (int i = 0; i < Data.Datasets.Length; i++)
             {
                 Data.Datasets[i] = new BubbleDataSet
                 {
-                    Label = x.Scientist,
-                    BackgroundColor = COLORS.SCIENTISTS[x.Scientist],
-                    BorderColor = COLORS.SCIENTISTS[x.Scientist],
+                    Label = kmeansArray[i].Unit,
+                    BackgroundColor = COLORS.UNITS[kmeansArray[i].Unit],
+                    BorderColor = COLORS.UNITS[kmeansArray[i].Unit],
                     BorderWidth = 1,
-                    Data = new Bubble[]
-                    {
-                        new Bubble
-                        {
-                        X = x.Point.X,
-                        Y = x.Point.Y,
-                        R = 10
-                        }
-                    }
+                    Data = new Bubble[kmeansArray[i].Points.Count]
                 };
-                i++;
-            });
+
+                for (int j = 0; j < kmeansArray[i].Points.Count; j++)
+                {
+                    Data.Datasets[i].Data[j] = new Bubble
+                    {
+                        X = kmeansArray[i].Points[j].X,
+                        Y = kmeansArray[i].Points[j].Y,
+                        R = 10
+                    };
+                }
+            }
         }
 
         public string Type { get; } = "bubble";

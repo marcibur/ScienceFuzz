@@ -42,6 +42,13 @@
         "route": "/api/Scientists/Tsne"
       },
       "backendUri": "%TSNE_BACKEND_URI%/api/Scientists/Tsne?code=%TSNE_SECRET%"
+    },
+    "Kmeans": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/api/Scientists/Kmeans"
+      },
+      "backendUri": "%KMEANS_BACKEND_URI%/api/Scientists/Kmeans?code=%KMEANS_SECRET%"
     }
   }
 }

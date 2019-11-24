@@ -1,0 +1,17 @@
+﻿@page "/KMEANS"
+@inject ScienceFuzzClient _httpClient
+@inject IJSRuntime _js
+
+<KmeansChartDisplay Chart="Chart" />
+
+@code
+{
+    public KmeansChart Chart { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var kmeans = await _httpClient.GetKmeans();
+        Chart = new KmeansChart(kmeans);
+        await _js.InvokeVoidAsync("loadChart", "kmeans-chart", Chart);
+    }
+}

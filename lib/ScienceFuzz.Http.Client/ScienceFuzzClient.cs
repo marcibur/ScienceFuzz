@@ -46,5 +46,11 @@ namespace ScienceFuzz.Http.Client
             var tsne = await _http.GetJsonAsync<IEnumerable<TsneModel>>($"{_uriBase}/Scientists/Tsne");
             return tsne;
         }
+
+        public async Task<IEnumerable<KmeansModel>> GetKmeans()
+        {
+            var kmeans = await _http.GetJsonAsync<IEnumerable<KmeansModel>>($"{_uriBase}/Scientists/Kmeans");
+            return kmeans;
+        }
     }
 }

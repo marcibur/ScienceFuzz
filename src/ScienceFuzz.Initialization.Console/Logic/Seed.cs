@@ -18,12 +18,12 @@ namespace ScienceFuzz.Initialization.Console.Logic
         {
             var tableClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudTableClient();
             await SeedScientistsAsync(tableClient);
-            await SeedPublicationsAsync(tableClient);
-            await SeedDisciplineContributionsAsync(tableClient);
-            await SeedDomainContributionsAsync(tableClient);
+            //await SeedPublicationsAsync(tableClient);
+            //await SeedDisciplineContributionsAsync(tableClient);
+            //await SeedDomainContributionsAsync(tableClient);
 
-            var blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
-            await SeedDisciplineListAsync(blobClient);
+            //blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
+            //await SeedDisciplineListAsync(blobClient);
         }
 
         static async Task SeedScientistsAsync(CloudTableClient tableClient)
