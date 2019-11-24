@@ -40,5 +40,11 @@ namespace ScienceFuzz.Http.Client
             var domainContributions = await _http.GetJsonAsync<IEnumerable<ContributionModel>>($"{_uriBase}/Scientists/{scientistName}/Domains/Contributions");
             return domainContributions;
         }
+
+        public async Task<IEnumerable<TsneModel>> GetTsne()
+        {
+            var tsne = await _http.GetJsonAsync<IEnumerable<TsneModel>>($"{_uriBase}/Scientists/Tsne");
+            return tsne;
+        }
     }
 }

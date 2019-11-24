@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Http.Client", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless.Disciplines", "src\ScienceFuzz.Serverless.Disciplines\ScienceFuzz.Serverless.Disciplines.csproj", "{60E86BE3-2A7E-4C3E-9E7D-5E64C60D0E7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceFuzz.Serverless.Domains", "src\ScienceFuzz.Serverless.Domains\ScienceFuzz.Serverless.Domains.csproj", "{1F689E36-F34D-469D-A817-8979BA2F6A44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScienceFuzz.Serverless.Domains", "src\ScienceFuzz.Serverless.Domains\ScienceFuzz.Serverless.Domains.csproj", "{1F689E36-F34D-469D-A817-8979BA2F6A44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

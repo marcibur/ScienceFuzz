@@ -28,6 +28,20 @@
         "route": "/api/Scientists/{scientistName}/Domains/Contributions"
       },
       "backendUri": "%DOMAINS_BACKEND_URI%/api/Scientists/{scientistName}/Domains/Contributions?code=%DOMAINS_SECRET%"
+    },
+    "DomainContributions": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/api/Scientists/Domains/Contributions"
+      },
+      "backendUri": "%DOMAINS_BACKEND_URI%/api/Scientists/Domains/Contributions?code=%DOMAINS_SECRET%"
+    },
+    "Tsne": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/api/Scientists/Tsne"
+      },
+      "backendUri": "%TSNE_BACKEND_URI%/api/Scientists/Tsne?code=%TSNE_SECRET%"
     }
   }
 }

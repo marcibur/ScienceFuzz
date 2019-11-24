@@ -39,7 +39,7 @@ namespace ScienceFuzz.Web.Spa.Models.Charts
             Tooltips = new Tooltips
             {
                 Enabled = true,
-                DisplayColors = false
+                DisplayColors = true
             }
         };
     }

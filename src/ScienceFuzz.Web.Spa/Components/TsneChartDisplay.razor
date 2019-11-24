@@ -1,0 +1,26 @@
+﻿<main class="tsne-main">
+    <Loading Visible="LoadingVisibility" />
+    <section class="@ChartVisibility">
+        <div class="row">
+            <div class="col col-12 col-lg-12">
+                <div><canvas id="tsne-chart"></canvas></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@code
+{
+    [Parameter]
+    public TsneChart Chart { get; set; }
+
+    public bool LoadingVisibility
+    {
+        get => Chart == null ? true : false;
+    }
+
+    public string ChartVisibility
+    {
+        get => Chart != null ? "visible" : "hidden";
+    }
+}

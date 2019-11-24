@@ -41,12 +41,12 @@
     public async Task LoadDisciplinesChart(string scientist)
     {
         DisciplinesChart = new DisciplinesChart(await _httpClient.GetDisciplineContributions(scientist));
-        await _js.InvokeVoidAsync("loadContributionChart", "chart-disciplines", DisciplinesChart);
+        await _js.InvokeVoidAsync("loadChart", "chart-disciplines", DisciplinesChart);
     }
 
     public async Task LoadDomainsChart(string scientist)
     {
         DomainsChart = new DomainsChart(await _httpClient.GetDomainContributions(scientist));
-        await _js.InvokeVoidAsync("loadContributionChart", "chart-domains", DomainsChart);
+        await _js.InvokeVoidAsync("loadChart", "chart-domains", DomainsChart);
     }
 }

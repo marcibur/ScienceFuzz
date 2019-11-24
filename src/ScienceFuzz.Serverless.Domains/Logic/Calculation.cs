@@ -1,30 +1,31 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
 using ScienceFuzz.Data;
 using ScienceFuzz.Models.Shared;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ScienceFuzz.Serverless.Disciplines.Functions
+namespace ScienceFuzz.Serverless.Domains.Logic
 {
-    // TODO: Refactor
-    // TODO: 404
-    public static class CalculateDomains
+    public class Calculation
     {
-        [FunctionName(nameof(CalculateDomains))]
-        public static async Task<IEnumerable<ContributionModel>> ExecuteAsync(
-            [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "Scientists/{scientistName}/Domains/Contributions")] HttpRequest httpRequest,
-            [Table(CONST.STORAGE_TABLE_NAMES.PUBLICATIONS, Connection = ENV.STORAGE_CONNECTION)] CloudTable publicationsTable,
-            [Table(CONST.STORAGE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS, Connection = ENV.STORAGE_CONNECTION)] CloudTable domainsTable,
-            string scientistName)
+        private readonly string _scientistName;
+        private readonly CloudTable _publicationsTable;
+        private readonly CloudTable _domainsTable;
+
+        public Calculation(string scientistName, CloudTable publicationsTable, CloudTable domainsTable)
+        {
+            _scientistName = scientistName;
+            _publicationsTable = publicationsTable;
+            _domainsTable = domainsTable;
+        }
+
+        public async Task<IEnumerable<ContributionModel>> Execute()
         {
             var publicationsQuery = new TableQuery<Publication>()
-                .Where(TableQuery.GenerateFilterCondition(nameof(Publication.PartitionKey), QueryComparisons.Equal, scientistName))
-                .Select(new string[] { nameof(Publication.RowKey), nameof(Publication.Count) });
-            var publicationsQueryResult = await publicationsTable.ExecuteQuerySegmentedAsync(publicationsQuery, null);
+             .Where(TableQuery.GenerateFilterCondition(nameof(Publication.PartitionKey), QueryComparisons.Equal, _scientistName))
+             .Select(new string[] { nameof(Publication.RowKey), nameof(Publication.Count) });
+            var publicationsQueryResult = await _publicationsTable.ExecuteQuerySegmentedAsync(publicationsQuery, null);
             var publications = publicationsQueryResult.Results.Select(x => x as Publication).ToList();
 
             List<ContributionModel> contributions = new List<ContributionModel>();
@@ -33,7 +34,7 @@ namespace ScienceFuzz.Serverless.Disciplines.Functions
                 var domainsQuery = new TableQuery<DomainContribution>()
                     .Where(TableQuery.GenerateFilterCondition(nameof(DomainContribution.PartitionKey), QueryComparisons.Equal, publication.RowKey))
                     .Select(new string[] { nameof(DomainContribution.RowKey), nameof(DomainContribution.Count) });
-                var domainsQueryResult = await domainsTable.ExecuteQuerySegmentedAsync(domainsQuery, null);
+                var domainsQueryResult = await _domainsTable.ExecuteQuerySegmentedAsync(domainsQuery, null);
                 var domains = domainsQueryResult.Results.ToList();
 
                 foreach (var domain in domains)
@@ -53,8 +54,6 @@ namespace ScienceFuzz.Serverless.Disciplines.Functions
 
             return contributions;
         }
-
-
 
         private static double S(double x, double y)
         {

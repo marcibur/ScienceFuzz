@@ -1,4 +1,4 @@
-﻿function loadContributionChart(id, input) {
+﻿function loadChart(id, input) {
     console.log(input);
     var ctx = document.getElementById(id);
     new Chart(ctx, input);

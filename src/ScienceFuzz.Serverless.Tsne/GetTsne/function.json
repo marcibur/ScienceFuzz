@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get"
+      ],
+      "route": "Scientists/Tsne"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    },
+    {
+      "name": "scientists",
+      "type": "table",
+      "tableName": "Scientists",
+      "connection": "STORAGE_CONNECTION",
+      "direction": "in"
+    }
+  ]
+}

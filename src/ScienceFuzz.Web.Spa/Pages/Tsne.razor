@@ -1,27 +1,17 @@
 ﻿@page "/TSNE"
-@using ScienceFuzz.Models
-@using ScienceFuzz.Web.Spa.Configuration
-@inject Settings _settings
-@inject HttpClient _http
+@inject ScienceFuzzClient _httpClient
 @inject IJSRuntime _js
 
-<main class="tsne-main">
-    <section>
-        <div class="row">
-            <div class="col col-12 col-lg-12">
-                <div><canvas id="chart-tsne"></canvas></div>
-            </div>
-        </div>
-    </section>
-</main>
+<TsneChartDisplay Chart="Chart" />
 
 @code
 {
-    //private List<TsneModel> models;
+    public TsneChart Chart { get; set; }
 
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    models = await _http.GetJsonAsync<List<TsneModel>>($"{_settings.ApiRootUrl}scientists/contributions/domains");
-    //    await _js.InvokeVoidAsync("setTsne", models);
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        var tsne = await _httpClient.GetTsne();
+        Chart = new TsneChart(tsne);
+        await _js.InvokeVoidAsync("loadChart", "tsne-chart", Chart);
+    }
 }

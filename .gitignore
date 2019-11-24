@@ -342,3 +342,4 @@ ASALocalRun/
 
 /src/ScienceFuzz.Initialization.Console/Configuration/configuration.json
 /src/ScienceFuzz.Initialization.Console/Config/configuration.json
+.vscode/
