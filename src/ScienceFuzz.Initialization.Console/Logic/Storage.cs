@@ -11,12 +11,12 @@ namespace ScienceFuzz.Initialization.Console.Logic
         {
             var tableClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudTableClient();
             await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.SCIENTISTS);
-            //await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.PUBLICATIONS);
-            //await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.DISCIPLINE_CONTRIBUTIONS);
-            //await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS);
+            await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.PUBLICATIONS);
+            await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.DISCIPLINE_CONTRIBUTIONS);
+            await tableClient.RecreateTableAsync(CONST.STORAGE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS);
 
-            //var blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
-            //await blobClient.RecreateContainerAsync(CONST.STORAGE_CONTAINER_NAMES.DISCIPLINES);
+            var blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
+            await blobClient.RecreateContainerAsync(CONST.STORAGE_CONTAINER_NAMES.DISCIPLINES);
         }
     }
 }

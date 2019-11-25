@@ -15,6 +15,7 @@ namespace ScienceFuzz.Serverless.Disciplines.Functions
     // TODO: 404
     public static class CalculateDisciplines
     {
+        [StorageAccount(ENV.STORAGE_CONNECTION)]
         [FunctionName(nameof(CalculateDisciplines))]
         public static async Task<IEnumerable<ContributionModel>> ExecuteAsync(
             [HttpTrigger(AuthorizationLevel.Function, HTTP.GET, Route = "Scientists/{scientistName}/Disciplines/Contributions")] HttpRequest httpRequest,

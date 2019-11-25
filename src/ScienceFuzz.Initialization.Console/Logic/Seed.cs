@@ -14,16 +14,18 @@ namespace ScienceFuzz.Initialization.Console.Logic
 {
     public static class Seed
     {
+        public static IEnumerable<PublicationCsvModel> Publi { get; set; }
+
         public static async Task SeedAsync(Configuration config)
         {
             var tableClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudTableClient();
             await SeedScientistsAsync(tableClient);
-            //await SeedPublicationsAsync(tableClient);
-            //await SeedDisciplineContributionsAsync(tableClient);
-            //await SeedDomainContributionsAsync(tableClient);
+            await SeedPublicationsAsync(tableClient);
+            await SeedDisciplineContributionsAsync(tableClient);
+            await SeedDomainContributionsAsync(tableClient, Publi);
 
-            //blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
-            //await SeedDisciplineListAsync(blobClient);
+            var blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
+            await SeedDisciplineListAsync(blobClient);
         }
 
         static async Task SeedScientistsAsync(CloudTableClient tableClient)
@@ -68,6 +70,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             using (var csv = new CsvReader(reader))
             {
                 publicationCsvModels = csv.GetRecords<PublicationCsvModel>().ToList();
+                Publi = publicationCsvModels;
             }
 
             var publicationGroups = publicationCsvModels.Select(x => new Publication
@@ -99,7 +102,8 @@ namespace ScienceFuzz.Initialization.Console.Logic
             using (var reader = new StreamReader(@"Data\disciplines.csv"))
             using (var csv = new CsvReader(reader))
             {
-                contributionsCsvModels = csv.GetRecords<DisciplineContributionCsvModel>().ToList();
+                var journals = Publi.Select(x => x.Journal).ToArray();
+                contributionsCsvModels = csv.GetRecords<DisciplineContributionCsvModel>().ToList().Where(x => journals.Contains(x.Journal)).ToList();
             }
 
             var count = 0;
@@ -122,7 +126,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             System.Console.WriteLine("Disciplines seeded successfully.");
         }
 
-        static async Task SeedDomainContributionsAsync(CloudTableClient tableClient)
+        static async Task SeedDomainContributionsAsync(CloudTableClient tableClient, IEnumerable<PublicationCsvModel> publications)
         {
             System.Console.WriteLine("Seeding domains...");
             var domainContributionsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS);
@@ -131,7 +135,8 @@ namespace ScienceFuzz.Initialization.Console.Logic
             using (var reader = new StreamReader(@"Data\domains.csv"))
             using (var csv = new CsvReader(reader))
             {
-                contributionsCsvModels = csv.GetRecords<DomainContributionCsvModel>().ToList();
+                var journals = publications.Select(x => x.Journal).ToArray();
+                contributionsCsvModels = csv.GetRecords<DomainContributionCsvModel>().ToList().Where(x => journals.Contains(x.Journal)).ToList();
             }
 
             var operations = new List<TableOperation>();

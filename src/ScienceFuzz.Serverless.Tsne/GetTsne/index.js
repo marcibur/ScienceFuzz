@@ -3,6 +3,7 @@ var tsne = require('tsne-js');
 
 module.exports = async function (context, req, scientists) {
     const uri = process.env["DOMAINS_CONTRIBUTIONS_URI"];
+
     let { data } = await axios.get(uri);
     let contributionSets = data;
 
