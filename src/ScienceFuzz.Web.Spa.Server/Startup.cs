@@ -36,7 +36,7 @@ namespace ScienceFuzz.Web.Spa.Server
             app.UseClientSideBlazorFiles<Spa.Startup>();
 
             app.UseRouting();
-
+            app.UseHttpsRedirection();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
