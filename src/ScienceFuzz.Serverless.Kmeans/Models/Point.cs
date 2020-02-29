@@ -4,13 +4,15 @@ namespace ScienceFuzz.Serverless.Kmeans.Models
 {
     public class Point
     {
-        public string Label { get; set; }
+        //public string Label { get; set; }
 
-        [VectorType(8)]
-        public float[] Contributions { get; set; }
+        public string Scientist { get; set; }
 
         [VectorType(2)]
-        public float[] Score { get; set; }
+        public float[] Coordinates { get; set; }
+
+        //[VectorType(2)]
+        //public float[] Score { get; set; }
 
         public uint PredictedLabel { get; set; }
     }

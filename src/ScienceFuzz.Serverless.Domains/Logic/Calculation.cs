@@ -28,7 +28,7 @@ namespace ScienceFuzz.Serverless.Domains.Logic
             var publicationsQueryResult = await _publicationsTable.ExecuteQuerySegmentedAsync(publicationsQuery, null);
             var publications = publicationsQueryResult.Results.Select(x => x as Publication).ToList();
 
-            List<ContributionModel> contributions = new List<ContributionModel>();
+            var contributions = new List<ContributionModel>();
             foreach (var publication in publications)
             {
                 var domainsQuery = new TableQuery<DomainContribution>()

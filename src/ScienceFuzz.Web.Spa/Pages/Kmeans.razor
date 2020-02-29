@@ -11,7 +11,7 @@
     protected override async Task OnInitializedAsync()
     {
         var kmeans = await _httpClient.GetKmeans();
-        Chart = new KmeansChart(kmeans);
+        Chart = new KmeansChart(kmeans.ToList());
         await _js.InvokeVoidAsync("loadChart", "kmeans-chart", Chart);
     }
 }

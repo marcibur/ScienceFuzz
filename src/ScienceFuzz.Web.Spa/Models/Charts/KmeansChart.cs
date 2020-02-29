@@ -2,41 +2,37 @@
 using ScienceFuzz.Web.Spa.Configuration;
 using ScienceFuzz.Web.Spa.Models.Charts.Common;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ScienceFuzz.Web.Spa.Models.Charts
 {
     public class KmeansChart
     {
-        public KmeansChart(IEnumerable<KmeansModel> kmeans)
+        public KmeansChart(List<KmeansModel> kmeans)
         {
             var kmeansArray = kmeans.ToArray();
 
             Data = new BubbleData
             {
-                Datasets = new BubbleDataSet[kmeans.Count()]
+                Datasets = new BubbleDataSet[kmeansArray.Length]
             };
 
             for (int i = 0; i < Data.Datasets.Length; i++)
             {
                 Data.Datasets[i] = new BubbleDataSet
                 {
-                    Label = kmeansArray[i].Unit,
-                    BackgroundColor = COLORS.UNITS[kmeansArray[i].Unit],
-                    BorderColor = COLORS.UNITS[kmeansArray[i].Unit],
+                    Label = kmeansArray[i].Scientist,
+                    BackgroundColor = COLORS.CLUSTERS[kmeansArray[i].ClusterNumber],
+                    BorderColor = COLORS.CLUSTERS[kmeansArray[i].ClusterNumber],
                     BorderWidth = 1,
-                    Data = new Bubble[kmeansArray[i].Points.Count]
+                    Data = new Bubble[1]
                 };
 
-                for (int j = 0; j < kmeansArray[i].Points.Count; j++)
+                Data.Datasets[i].Data[0] = new Bubble
                 {
-                    Data.Datasets[i].Data[j] = new Bubble
-                    {
-                        X = kmeansArray[i].Points[j].X,
-                        Y = kmeansArray[i].Points[j].Y,
-                        R = 10
-                    };
-                }
+                    X = kmeansArray[i].Point.X,
+                    Y = kmeansArray[i].Point.Y,
+                    R = 10
+                };
             }
         }
 
@@ -54,7 +50,7 @@ namespace ScienceFuzz.Web.Spa.Models.Charts
             Tooltips = new Tooltips
             {
                 Enabled = true,
-                DisplayColors = false
+                DisplayColors = true
             }
         };
     }

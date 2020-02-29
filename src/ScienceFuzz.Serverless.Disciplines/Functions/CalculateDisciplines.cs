@@ -56,7 +56,7 @@ namespace ScienceFuzz.Serverless.Disciplines.Functions
                     var contribution = contributions.First(y => y.Name == disciplineName);
                     for (int i = 0; i < publication.Count; i++)
                     {
-                        contribution.Value = S(contribution.Value, 1 * 0.001);
+                        contribution.Value = S(contribution.Value, 0.001);
                     }
                 }
             }

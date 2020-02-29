@@ -20,7 +20,7 @@ namespace ScienceFuzz.Serverless.Scientists.Functions
         {
             var query = new TableQuery<Scientist>().Select(new string[] { nameof(Scientist.RowKey) });
             var queryResult = await scientistsTable.ExecuteQuerySegmentedAsync(query, null);
-            var scientistNames = queryResult.Results.Select(x => x.RowKey).OrderBy(x => int.Parse(x.Split('_')[1])).ToList();
+            var scientistNames = queryResult.Results.Select(x => x.RowKey).OrderBy(x => int.Parse(x.Split('_')[1].Replace("_", ""))).ToList();
             return scientistNames;
         }
     }

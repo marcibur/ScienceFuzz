@@ -14,15 +14,13 @@ namespace ScienceFuzz.Initialization.Console.Logic
 {
     public static class Seed
     {
-        public static IEnumerable<PublicationCsvModel> Publi { get; set; }
-
         public static async Task SeedAsync(Configuration config)
         {
             var tableClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudTableClient();
             await SeedScientistsAsync(tableClient);
-            await SeedPublicationsAsync(tableClient);
-            await SeedDisciplineContributionsAsync(tableClient);
-            await SeedDomainContributionsAsync(tableClient, Publi);
+            var publications = await SeedPublicationsAsync(tableClient);
+            await SeedDisciplineContributionsAsync(tableClient, publications);
+            await SeedDomainContributionsAsync(tableClient, publications);
 
             var blobClient = CloudStorageAccount.Parse(config.StorageConnection).CreateCloudBlobClient();
             await SeedDisciplineListAsync(blobClient);
@@ -60,7 +58,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             System.Console.WriteLine("Scientists seeded successfully.");
         }
 
-        static async Task SeedPublicationsAsync(CloudTableClient tableClient)
+        static async Task<IEnumerable<string>> SeedPublicationsAsync(CloudTableClient tableClient)
         {
             System.Console.WriteLine("Seeding publications...");
             var publicatonsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.PUBLICATIONS);
@@ -70,7 +68,6 @@ namespace ScienceFuzz.Initialization.Console.Logic
             using (var csv = new CsvReader(reader))
             {
                 publicationCsvModels = csv.GetRecords<PublicationCsvModel>().ToList();
-                Publi = publicationCsvModels;
             }
 
             var publicationGroups = publicationCsvModels.Select(x => new Publication
@@ -91,9 +88,10 @@ namespace ScienceFuzz.Initialization.Console.Logic
             }
 
             System.Console.WriteLine("Publications seeded successfully.");
+            return publicationCsvModels.Select(x => x.Journal).Distinct().ToList();
         }
 
-        static async Task SeedDisciplineContributionsAsync(CloudTableClient tableClient)
+        static async Task SeedDisciplineContributionsAsync(CloudTableClient tableClient, IEnumerable<string> publications)
         {
             System.Console.WriteLine("Seeding disciplines...");
             var disciplineContributionsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.DISCIPLINE_CONTRIBUTIONS);
@@ -102,8 +100,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             using (var reader = new StreamReader(@"Data\disciplines.csv"))
             using (var csv = new CsvReader(reader))
             {
-                var journals = Publi.Select(x => x.Journal).ToArray();
-                contributionsCsvModels = csv.GetRecords<DisciplineContributionCsvModel>().ToList().Where(x => journals.Contains(x.Journal)).ToList();
+                contributionsCsvModels = csv.GetRecords<DisciplineContributionCsvModel>().Where(x => publications.Contains(x.Journal)).ToList();
             }
 
             var count = 0;
@@ -126,7 +123,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             System.Console.WriteLine("Disciplines seeded successfully.");
         }
 
-        static async Task SeedDomainContributionsAsync(CloudTableClient tableClient, IEnumerable<PublicationCsvModel> publications)
+        static async Task SeedDomainContributionsAsync(CloudTableClient tableClient, IEnumerable<string> publications)
         {
             System.Console.WriteLine("Seeding domains...");
             var domainContributionsTable = tableClient.GetTableReference(CONST.STORAGE_TABLE_NAMES.DOMAIN_CONTRIBUTIONS);
@@ -135,8 +132,7 @@ namespace ScienceFuzz.Initialization.Console.Logic
             using (var reader = new StreamReader(@"Data\domains.csv"))
             using (var csv = new CsvReader(reader))
             {
-                var journals = publications.Select(x => x.Journal).ToArray();
-                contributionsCsvModels = csv.GetRecords<DomainContributionCsvModel>().ToList().Where(x => journals.Contains(x.Journal)).ToList();
+                contributionsCsvModels = csv.GetRecords<DomainContributionCsvModel>().Where(x => publications.Contains(x.Journal)).ToList();
             }
 
             var operations = new List<TableOperation>();
@@ -206,20 +202,6 @@ namespace ScienceFuzz.Initialization.Console.Logic
                 count++;
                 System.Console.WriteLine($"Domains seeded: {count}");
             }
-
-            //var groups = operations.GroupBy(x => x.Entity.PartitionKey);
-            //var count = 0;
-            //foreach (var group in groups)
-            //{
-            //    var batch = new TableBatchOperation();
-            //    foreach (var operation in group)
-            //    {
-            //        batch.Add(operation);
-            //    }
-            //    await domainContributionsTable.ExecuteBatchAsync(batch);
-            //    count += batch.Count;
-            //    System.Console.WriteLine($"Domains seeded: {count}");
-            //}
 
             System.Console.WriteLine("Domains seeded successfully.");
         }
